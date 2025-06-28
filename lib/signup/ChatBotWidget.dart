@@ -14,7 +14,7 @@ class _ChatBotWidgetState extends State<ChatBotWidget> {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
-String welcome = "Hej og velkommen til Appelsin ";
+String welcome = "Hej og velkommen til Appelsin";
 String welcome2 = "Hvad er dit navn";
 int index =0;
 String fornavn = "";
@@ -229,9 +229,13 @@ appBar: AppBar(),
           ),
         ),
         if(showBottom)
-        ElevatedButton(onPressed:(){
+        (onPressed:(){
           Navigator.push(context, MaterialPageRoute(builder: (context) => Verifyphonenumberwidget(phonenumber: telefonnummer)));
-        }, child: Text("Verificere"))
+
+        },
+
+          child: Text("Verificere"),
+        )
       ],
     )));
   }
