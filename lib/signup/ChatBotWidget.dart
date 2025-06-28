@@ -15,7 +15,7 @@ class _ChatBotWidgetState extends State<ChatBotWidget> {
   final ScrollController _scrollController = ScrollController();
 
 String welcome = "Hej og velkommen til Appelsin";
-String welcome2 = "Hvad er dit navn";
+String welcome2 = "Hvad er dit fornavn";
 int index =0;
 String fornavn = "";
 String efternavn ="";
@@ -107,7 +107,7 @@ if(botResponse == "Tak!") {
 
   String? _generateBotResponse(String userInput) {
     final welcome = "Hej og velkommen til Appelsin";
-    final welcome2 = "Hvad er dit navn";
+    final welcome2 = "Hvad er dit fornavn";
 
     if (userInput != welcome && userInput != welcome2 && getIndex() == 0) {
       setFornavn(userInput);
@@ -229,8 +229,14 @@ appBar: AppBar(),
           ),
         ),
         if(showBottom)
-        (onPressed:(){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => Verifyphonenumberwidget(phonenumber: telefonnummer)));
+          ElevatedButton
+        (
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.orange[100],
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            ),
+            onPressed:(){
+          Navigator.push(context, MaterialPageRoute(builder: (context) => VerifyPhoneNumberWidget(phoneNumber: telefonnummer)));
 
         },
 
