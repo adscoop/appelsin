@@ -20,7 +20,7 @@ class _Dashboardwidget extends State<Dashboardwidget> {
 
   }
   List<Widget> get pages => <Widget>[
-    Landingpageviewwidget(),
+    LandingPageViewWidget(),
 IncomeWidget(),
     Outcomewidget(),
     Offerwidget()
@@ -28,20 +28,12 @@ IncomeWidget(),
 
   Widget _bottamNavigationBar() {
     return Container(
-      margin: EdgeInsets.only(left: 16, right: 16, bottom: 50),
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      height: 45,
-      decoration: BoxDecoration(
-        color: Colors.blue.shade700,
-        borderRadius: BorderRadius.circular(40), // Stadium effect
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 5,
-            offset: Offset(0, 3),
-          )
-        ],
-      ),
+        height: 100,
+        padding: const EdgeInsets.only(bottom: 0, left: 30, right: 30),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(50),
+          color: Colors.lightBlue,
+        ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

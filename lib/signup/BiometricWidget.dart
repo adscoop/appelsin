@@ -1,4 +1,5 @@
 
+import 'package:appelsin/services/BiometricService.dart';
 import 'package:flutter/material.dart';
 
 class Biometricwidget extends StatefulWidget {
@@ -7,23 +8,48 @@ class Biometricwidget extends StatefulWidget {
 }
 
 class _Biometricwidget extends State<Biometricwidget> {
-  
+  late Biometricservice _biometricservice;
+
+  @override
+  @override
+    void initState() {
+      // TODO: implement initState
+      super.initState();
+      _biometricservice = Biometricservice();
+    }
   @override
     Widget build(BuildContext context) {
 
     return  Scaffold(
       appBar:  AppBar(),
       body: SafeArea(child: Container(
+        alignment: Alignment.topCenter,
         child: Column(
           children: [
-            Container(
-              width: 200,
-              height: 200,
-              child: Text("Image")
-            )
+
+              Container(
+
+                width: 200,
+                height: 200,
+                child: GestureDetector(
+                    onTap:  ()   {
+                      isface();
+                    },
+                    child: Text("Image"))
+              )
           ],
         ),
       )),
     );
+    }
+
+    Future<void> isface( ) async {
+      final res = await    _biometricservice.authenticateWithBiometrics();
+    if(res) {
+      print("You can log in");
+    } else {
+      print("you can not login");
+    }
+
     }
 }

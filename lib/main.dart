@@ -1,6 +1,7 @@
 import 'package:appelsin/AppelsinTheme.dart';
 import 'package:appelsin/DashBoardWidget.dart';
 import 'package:appelsin/bank/IncomeWidget.dart';
+import 'package:appelsin/signup/BiometricWidget.dart';
 import 'package:appelsin/signup/ChatBotWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -13,7 +14,7 @@ final GoRouter _router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (_, __) => Dashboardwidget(),
+      builder: (_, __) => Biometricwidget(),
     ),
 
   ],
