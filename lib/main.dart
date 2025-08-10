@@ -1,8 +1,10 @@
 import 'package:appelsin/AppelsinTheme.dart';
 import 'package:appelsin/DashBoardWidget.dart';
 import 'package:appelsin/bank/IncomeWidget.dart';
+import 'package:appelsin/customer/CreateCustomerWidget.dart';
 import 'package:appelsin/signup/BiometricWidget.dart';
 import 'package:appelsin/signup/ChatBotWidget.dart';
+import 'package:appelsin/signup/NameWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,7 +16,7 @@ final GoRouter _router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (_, __) => Biometricwidget(),
+      builder: (_, __) => Namewidget(),
     ),
 
   ],
@@ -33,7 +35,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Appelsin',
-theme: Appelsintheme.lightTheme(),
+theme: AppelsinTheme.lightTheme(),
       routerConfig: _router,
     );
   }

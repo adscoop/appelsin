@@ -1,17 +1,18 @@
-
 import 'package:flutter/material.dart';
 
-class Invoicewidget extends StatefulWidget{
+class InvoiceWidget extends StatelessWidget {
+  final void Function(bool) createInvoice;
+
+  const InvoiceWidget({Key? key, required this.createInvoice}) : super(key: key);
 
   @override
-    State<StatefulWidget> createState()  => _Invoicewidget();
-}
+  Widget build(BuildContext context) {
+    return Container(
+     child: Column(
+       children: [
 
-
-class _Invoicewidget extends State<Invoicewidget> {
-  @override
-    Widget build(BuildContext context) {
-      // TODO: implement build
-      throw UnimplementedError();
-    }
+       ],
+     ),
+    );
+  }
 }
