@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-
+import 'package:appelsin/customwidgets/CustomWidgets.dart';
 class CreateCustomerWidget extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _CreateCustomerWidgetState();
@@ -64,21 +64,21 @@ class _CreateCustomerWidgetState extends State<CreateCustomerWidget> {
       padding: EdgeInsets.all(16),
       child: Column(
         children: [
-          label("Land"),
+        Customwidgets.label("Land"),
           dropdownCountry(),
-          label("Navn"),
-          textField(nameController),
-          label("CVR"),
-          textField(cvrController),
-          label("Adresse"),
-          label("Vejnavn"),
-          textField(streetController),
-          label("Nummer"),
-          textField(numberController),
-          label("Postnummer"),
-          textField(zipController),
-          label("Email"),
-          textField(emailController),
+        Customwidgets.label("Navn"),
+    Customwidgets.textField(nameController),
+          Customwidgets.label("CVR"),
+          Customwidgets. textField(cvrController),
+          Customwidgets. label("Adresse"),
+          Customwidgets. label("Vejnavn"),
+          Customwidgets. textField(streetController),
+          Customwidgets. label("Nummer"),
+          Customwidgets. textField(numberController),
+          Customwidgets. label("Postnummer"),
+          Customwidgets. textField(zipController),
+          Customwidgets. label("Email"),
+          Customwidgets. textField(emailController),
           SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
@@ -96,21 +96,21 @@ class _CreateCustomerWidgetState extends State<CreateCustomerWidget> {
       padding: EdgeInsets.all(16),
       child: Column(
         children: [
-          label("Land"),
+          Customwidgets.label("Land"),
           dropdownCountry(),
-          label("Firna navn"),
-          textField(nameController),
-          label("CVR"),
-          textField(cvrController),
-          label("Adresse"),
-          label("Vejnavn"),
-          textField(streetController),
-          label("Nummer"),
-          textField(numberController),
-          label("Postnummer"),
-          textField(zipController),
-          label("Email"),
-          textField(emailController),
+          Customwidgets. label("Firna navn"),
+          Customwidgets. textField(nameController),
+          Customwidgets. label("CVR"),
+          Customwidgets. textField(cvrController),
+          Customwidgets. label("Adresse"),
+          Customwidgets. label("Vejnavn"),
+          Customwidgets. textField(streetController),
+          Customwidgets. label("Nummer"),
+          Customwidgets. textField(numberController),
+          Customwidgets. label("Postnummer"),
+          Customwidgets. textField(zipController),
+          Customwidgets. label("Email"),
+          Customwidgets. textField(emailController),
           SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
@@ -123,28 +123,7 @@ class _CreateCustomerWidgetState extends State<CreateCustomerWidget> {
     );
   }
 
-  Widget label(String text) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      margin: EdgeInsets.only(top: 12, bottom: 4),
-      child: Text(
-        text,
-        style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400),
-      ),
-    );
-  }
 
-  Widget textField(TextEditingController controller) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      ),
-    );
-  }
 
   Widget dropdownCountry() {
     return DropdownButtonFormField<String>(

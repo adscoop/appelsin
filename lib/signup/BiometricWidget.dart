@@ -21,7 +21,9 @@ class _Biometricwidget extends State<Biometricwidget> {
     Widget build(BuildContext context) {
 
     return  Scaffold(
-      appBar:  AppBar(),
+      appBar:  AppBar(
+        title: Text("Nemmere log ind"),
+      ),
       body: SafeArea(child: Container(
         alignment: Alignment.topCenter,
         child: Column(
@@ -36,7 +38,14 @@ class _Biometricwidget extends State<Biometricwidget> {
                       isface();
                     },
                     child: Text("Image"))
-              )
+              ),
+            Spacer(),
+            Container(
+              child: ElevatedButton(onPressed: (){}, child: Text("Ja benyt face id ")),
+            ),
+            Container(
+              child: ElevatedButton(onPressed: (){}, child: Text("Nej")),
+            )
           ],
         ),
       )),

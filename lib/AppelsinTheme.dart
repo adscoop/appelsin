@@ -19,32 +19,59 @@ class AppelsinTheme {
 
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ButtonStyle()
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.orangeAccent.shade200,
+          foregroundColor: Colors.black,
+
+          side: BorderSide(
+            style: BorderStyle.none,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          )
+        ),
+
       ),
       // Input decoration theme (TextFields)
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: CupertinoDynamicColor.withBrightness(color: Colors.orange, darkColor: Colors.orangeAccent), width: 0.1
+            borderRadius: BorderRadius.circular(7),
+            borderSide: BorderSide(color: CupertinoDynamicColor.withBrightness(color: Colors.blue.shade900, darkColor: Colors.orangeAccent), width: 0.1
         )),
-        fillColor: Colors.white70,
+        fillColor: Colors.lightBlue.shade50,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(7),
           borderSide: BorderSide(color: CupertinoDynamicColor.withBrightness(color: Colors.red, darkColor: Colors.redAccent))
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: CupertinoColors.systemOrange, width: 0.1),
+          borderRadius: BorderRadius.circular(7),
+          borderSide: BorderSide(color: CupertinoColors.activeBlue, width: 1.0),
         ),
-      ),
 
+      prefixIconColor: Colors.blue.shade400
+      ),
       // Text styling (optional)
       textTheme: const TextTheme(
         bodyLarge: TextStyle(fontSize: 18),
-        bodyMedium: TextStyle(fontSize: 16),
+        bodyMedium: TextStyle(fontSize: 12),
         titleLarge: TextStyle(fontWeight: FontWeight.bold),
+
+
+
+
       ),
+      textSelectionTheme: const TextSelectionThemeData(
+
+      ),
+
+      datePickerTheme: DatePickerThemeData(
+        backgroundColor: Colors.orangeAccent.shade100,
+      rangePickerBackgroundColor: Colors.deepOrange,
+        inputDecorationTheme: InputDecorationTheme(
+
+        )
+      )
     );
   }
 }
