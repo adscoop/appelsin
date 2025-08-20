@@ -19,7 +19,7 @@ class _Pincodesetupwidget extends State<Pincodesetupwidget>{
     Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Pin"),
+        title: Text("Pin-kode"),
       ),
       body: SafeArea(
 
@@ -64,7 +64,7 @@ alignment: Alignment.center,
 
   Widget textbox(TextEditingController t){
     return Container(
-      margin: EdgeInsets.all(10),
+      margin: EdgeInsets.all(16),
       width: 55,
       height: 55,
 
