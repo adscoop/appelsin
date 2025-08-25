@@ -19,7 +19,7 @@ class _Pincodesetupwidget extends State<Pincodesetupwidget>{
     Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Pin-kode"),
+        title: Text("Pin-kode", style: TextStyle(fontFamily: 'Sora', fontSize: 20),),
       ),
       body: SafeArea(
 
@@ -29,12 +29,13 @@ class _Pincodesetupwidget extends State<Pincodesetupwidget>{
         child: Column(
           children: [
 
-Container(
-  height: 200,
-),
+            Container(
+              child: Text("Angiv en firecifret PIN-kode der skal bruges når du vil \nlogge ind i Appelsin app’en."),
+            ),
             Container(
 
 alignment: Alignment.center,
+
               margin: EdgeInsets.only(left: 12, right: 12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -64,7 +65,7 @@ alignment: Alignment.center,
 
   Widget textbox(TextEditingController t){
     return Container(
-      margin: EdgeInsets.all(16),
+      margin: EdgeInsets.only(left: 7,right: 7, bottom: 50, top: 50),
       width: 55,
       height: 55,
 

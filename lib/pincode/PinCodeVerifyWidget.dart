@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 class Pincodeverifywidget extends StatefulWidget{
   
   @override
@@ -54,7 +55,11 @@ class _Pincodeverifywidget  extends State<Pincodeverifywidget>{
                       style: ElevatedButton.styleFrom(
                           fixedSize: Size(MediaQuery.of(context).size.width, 22)
                       ),
-                      onPressed: (){}, child: Text("Videre")),
+                      onPressed: (){
+                        int pin = int.parse("${textEditingController1.value.text}${textEditingController2.value.text}${textEditingController3.value.text}${textEditingController4.value.text}");
+                        savePin(pin);
+
+                      }, child: Text("Videre")),
                 )
               ],
             ),
@@ -70,6 +75,11 @@ class _Pincodeverifywidget  extends State<Pincodeverifywidget>{
 
       child: TextField(controller: t) ,
     );
+  }
+
+  Future<void> savePin(int pin) async {
+ final shared =   await SharedPreferences.getInstance();
+ shared.setInt("pin", pin);
   }
 
 }

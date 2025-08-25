@@ -35,10 +35,19 @@ dependencies:
   local_auth: any
   shared_preferences: any
   uni_links: any
+  flutter_svg: any
+  flutter_launcher_icons: any
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/3x/neg_appelsinillu@3x.png"
+  adaptive_icon_background: "#ffffff"   # kun Android adaptive ikoner
+  adaptive_icon_foreground: "assets/images/3x/neg_appelsinillu@3x.png"
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.8
+  remove_alpha_ios: true
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +73,8 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/SVG/
+    - assets/images/3x/
     - assets/fonts/
   #   - images/a_dot_ham.jpeg
 

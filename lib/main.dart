@@ -20,7 +20,7 @@ final GoRouter _router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (_, __) => Pincodesetupwidget(),
+      builder: (_, __) => SmashPageWidget(),
     ),
 GoRoute(path: 'sms', builder: (_,state) { return VerifyPhoneNumberWidget(phoneNumber: 11233); }),
     GoRoute(path: 'email', builder: (_ ,state)  {

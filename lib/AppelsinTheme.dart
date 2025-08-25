@@ -39,7 +39,7 @@ class AppelsinTheme {
             borderRadius: BorderRadius.circular(7),
             borderSide: BorderSide(color: CupertinoDynamicColor.withBrightness(color: Colors.blue.shade900, darkColor: Colors.orangeAccent), width: 0.1
         )),
-        fillColor: Colors.lightBlue.shade50,
+        fillColor: const Color(0xFFCCDDFE),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7),
           borderSide: BorderSide(color: CupertinoDynamicColor.withBrightness(color: Colors.red, darkColor: Colors.redAccent))
