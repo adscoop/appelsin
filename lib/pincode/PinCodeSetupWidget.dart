@@ -1,76 +1,147 @@
-
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-class Pincodesetupwidget  extends StatefulWidget {
+import 'package:appelsin/customwidgets/NavigatorDirection.dart';
+import 'package:appelsin/customwidgets/SlideDirection.dart';
+import 'package:appelsin/customwidgets/CustomWidgets.dart';
+import 'package:appelsin/pincode/PinCodeVerifyWidget.dart';
+class PinCodeSetupWidget extends StatefulWidget {
+  const PinCodeSetupWidget({super.key});
 
   @override
-    State<StatefulWidget> createState()  => _Pincodesetupwidget();
+  State<PinCodeSetupWidget> createState() => _PinCodeSetupWidgetState();
 }
 
+class _PinCodeSetupWidgetState extends State<PinCodeSetupWidget> {
+  final List<TextEditingController> _controllers =
+  List.generate(4, (_) => TextEditingController());
 
-class _Pincodesetupwidget extends State<Pincodesetupwidget>{
-  TextEditingController textEditingController1 = TextEditingController();
-  TextEditingController textEditingController2 = TextEditingController();
-  TextEditingController textEditingController3 = TextEditingController();
-  TextEditingController textEditingController4 = TextEditingController();
   @override
-    Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Pin-kode", style: TextStyle(fontFamily: 'Sora', fontSize: 20),),
-      ),
-      body: SafeArea(
-
-          child: Container(
-        alignment: Alignment.center,
-        margin: EdgeInsets.all(0),
-        child: Column(
-          children: [
-
-            Container(
-              child: Text("Angiv en firecifret PIN-kode der skal bruges når du vil \nlogge ind i Appelsin app’en."),
-            ),
-            Container(
-
-alignment: Alignment.center,
-
-              margin: EdgeInsets.only(left: 12, right: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment:CrossAxisAlignment.center,
-                children: [
-                 textbox(textEditingController1),
-                  textbox(textEditingController2),
-                  textbox(textEditingController3),
-                  textbox(textEditingController4)
-                ],
-              ),
-            ),
-            Spacer(),
-            Container(
-              margin: EdgeInsets.only(left: 16, right: 16),
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    fixedSize: Size(MediaQuery.of(context).size.width, 22)
-                  ),
-                  onPressed: (){}, child: Text("Videre")),
-            )
-          ],
-        ),
-      )),
-    ) ;
+  void dispose() {
+    for (final c in _controllers) {
+      c.dispose();
+    }
+    super.dispose();
   }
 
-  Widget textbox(TextEditingController t){
-    return Container(
-      margin: EdgeInsets.only(left: 7,right: 7, bottom: 50, top: 50),
-      width: 55,
-      height: 55,
-
-      child: TextField(controller: t) ,
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Pin-kode",
+          style: TextStyle(fontFamily: 'Sora', fontSize: 20),
+        ),
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              const Text(
+                "Angiv en firecifret PIN-kode der skal bruges når du vil "
+                    "logge ind i Appelsin app’en.",
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 32),
+              Customwidgets.step(0.3, "3", "10"),
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: List.generate(
+                  4,
+                      (index) => _buildPinBox(_controllers[index]),
+                ),
+              ),
+              const Spacer(),
+              SizedBox(
+                width: double.infinity,
+                height: 48,
+                child: ElevatedButton(
+                  onPressed: _onSubmit,
+                  child: const Text("Videre"),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
+  Widget _buildStepIndicator() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFF7EB),
+        borderRadius: BorderRadius.circular(100),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: const [
+          CircleAvatar(
+            radius: 14,
+            backgroundColor: Colors.transparent,
+            child: CircleAvatar(
+              radius: 10,
+              backgroundColor: Color(0xFFFF9400),
+            ),
+          ),
+          SizedBox(width: 8),
+          Text(
+            'Trin 3 af 10',
+            style: TextStyle(
+              color: Color(0xFF231303),
+              fontSize: 14,
+              fontFamily: 'Figtree',
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPinBox(TextEditingController controller) {
+    return Container(
+      width: 60,
+      height: 75,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF3F7FF),
+        border: Border.all(color: const Color(0xFFCCDDFE)),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: TextField(
+        controller: controller,
+        keyboardType: TextInputType.number,
+        textAlign: TextAlign.center,
+        maxLength: 1,
+        style: const TextStyle(
+          color: Color(0xFF392919),
+          fontSize: 11,
+          fontFamily: 'Figtree',
+          fontWeight: FontWeight.w400,
+        ),
+        decoration: const InputDecoration(
+          counterText: '', // removes the char counter
+          border: InputBorder.none,
+        ),
+        onChanged: (value) {
+          if (value.isNotEmpty) {
+            // move to next box automatically
+            final index = _controllers.indexOf(controller);
+            if (index < _controllers.length - 1) {
+              FocusScope.of(context).nextFocus();
+            }
+          }
+        },
+      ),
+    );
+  }
+
+  void _onSubmit() {
+    final pin = _controllers.map((c) => c.text).join();
+    debugPrint("PIN entered: $pin");
+    navigateWithSlide(context, PinCodeVerifyWidget(), SlideDirection.right);
+    // TODO: handle PIN logic (validate or save)
+  }
 }

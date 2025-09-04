@@ -12,6 +12,8 @@ import 'package:appelsin/signup/VerifyPhoneNumberWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:uni_links/uni_links.dart';
+import 'danskebank/OpretDbWidget.dart';
+import 'danskebank/CountryListWidget.dart';
 final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
 final GoRouter _router = GoRouter(
@@ -20,7 +22,7 @@ final GoRouter _router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (_, __) => SmashPageWidget(),
+      builder: (_, __) => PinCodeSetupWidget(),
     ),
 GoRoute(path: 'sms', builder: (_,state) { return VerifyPhoneNumberWidget(phoneNumber: 11233); }),
     GoRoute(path: 'email', builder: (_ ,state)  {

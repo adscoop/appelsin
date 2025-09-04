@@ -1,6 +1,6 @@
 import  'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:percent_indicator/percent_indicator.dart';
 class Customwidgets  {
 
 static  Widget label(String text) {
@@ -24,7 +24,6 @@ static Widget textField(
   return Container(
     margin: EdgeInsets.only(left: 16, right: 16),
     height: 76,
-    width: 376,
     child: TextField(
       cursorHeight: 12,
       controller: controller,
@@ -43,5 +42,37 @@ static Widget textField(
   );
 }
 
+
+static Widget step(double procent , String step , String step2) {
+ return Container(
+    padding: const EdgeInsets.only(top: 8, left: 8, right: 12, bottom: 8),
+    decoration: ShapeDecoration(
+      color: const Color(0xFFFFF7EB) /* primary-juicy-orange-juicy-orange-5 */,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(100),
+      ),
+    ),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      spacing: 12,
+      children: [
+       Container(
+         child: new CircularPercentIndicator(radius: 10, percent: procent, backgroundColor: Colors.white, circularStrokeCap: CircularStrokeCap.round,progressBorderColor: Colors.orange,)
+       ),
+        Text(
+          'Trin ${step} af ${step2}',
+          style: TextStyle(
+            color: const Color(0xFF231303) /* primary-dark-brown-dark-brown-200 */,
+            fontSize: 14,
+            fontFamily: 'Figtree',
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
+    ),
+  );
+}
 
 }

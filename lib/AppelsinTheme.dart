@@ -66,12 +66,49 @@ class AppelsinTheme {
       ),
 
       datePickerTheme: DatePickerThemeData(
-        backgroundColor: Colors.orangeAccent.shade100,
-      rangePickerBackgroundColor: Colors.deepOrange,
-        inputDecorationTheme: InputDecorationTheme(
+      backgroundColor: const Color(0xFFE0EAFF),
+      elevation: 2,
+      dividerColor: Colors.orange,
+      headerBackgroundColor: const Color(0xFF3B82F6),
+      headerForegroundColor: Colors.white,
+      headerHeadlineStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+      headerHelpStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+      weekdayStyle: const TextStyle(fontWeight: FontWeight.w600, letterSpacing: 0.2),
+      dayStyle: const TextStyle(fontSize: 9),
 
-        )
-      )
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(5),
+        )),
+
+        dayShape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4), // or 0 for sharp square
+          ),
+        ),
+      
+
+dayForegroundColor: WidgetStatePropertyAll(Colors.black),
+        
+        // Today outline (optional)
+        todayBorder: const BorderSide(color: Colors.lightBlue, width: 2),
+        todayForegroundColor: const WidgetStatePropertyAll(Colors.white),
+        todayBackgroundColor: WidgetStatePropertyAll(Colors.blue),
+        dayOverlayColor: WidgetStatePropertyAll(const Color(0xFF3B82F6)),
+    ),
+
+      chipTheme: ChipThemeData(backgroundColor: Colors.white,
+        shape: StadiumBorder()
+      ),
+      checkboxTheme: CheckboxThemeData(
+
+      ),
+      radioTheme: RadioThemeData(
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+fillColor: WidgetStatePropertyAll(Colors.blue),
+        overlayColor: WidgetStatePropertyAll(Colors.blue),
+
+      ),
+
     );
   }
 }

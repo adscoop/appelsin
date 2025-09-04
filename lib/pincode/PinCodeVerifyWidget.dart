@@ -1,85 +1,150 @@
-import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-class Pincodeverifywidget extends StatefulWidget{
-  
+import 'package:appelsin/customwidgets/CustomWidgets.dart';
+import 'package:appelsin/customwidgets/NavigatorDirection.dart';
+import 'package:appelsin/customwidgets/SlideDirection.dart';
+import 'package:appelsin/customwidgets/CustomWidgets.dart';
+import 'package:appelsin/pincode/PinCodeVerifyWidget.dart';
+import 'package:appelsin/pincode/SavePinCodeWidget.dart';
+class PinCodeVerifyWidget extends StatefulWidget {
+  const PinCodeVerifyWidget({super.key});
+
   @override
-    State<StatefulWidget> createState() {
-      // TODO: implement createState
-      throw UnimplementedError();
-    }
+  State<StatefulWidget> createState() => _PinCodeVerifyWidget();
 }
 
+class _PinCodeVerifyWidget extends State<PinCodeVerifyWidget> {
+  final List<TextEditingController> _controllers =
+  List.generate(4, (_) => TextEditingController());
 
-class _Pincodeverifywidget  extends State<Pincodeverifywidget>{
+  @override
+  void dispose() {
+    for (final c in _controllers) {
+      c.dispose();
+    }
+    super.dispose();
+  }
 
-  TextEditingController textEditingController1 = TextEditingController();
-  TextEditingController textEditingController2 = TextEditingController();
-  TextEditingController textEditingController3 = TextEditingController();
-  TextEditingController textEditingController4 = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Pin"),
+        title: const Text(
+          "Verify Pincode",
+          style: TextStyle(fontFamily: 'Sora', fontSize: 20),
+        ),
       ),
       body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              const Text(
+                "Angiv en firecifret PIN-kode der skal bruges når du vil "
+                    "logge ind i Appelsin app’en.",
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 32),
+              Customwidgets.step(0.4, "4", "10"),
 
-          child: Container(
-            alignment: Alignment.center,
-            margin: EdgeInsets.all(0),
-            child: Column(
-              children: [
-                Container(
-                  height: 200,
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: List.generate(
+                  4,
+                      (index) => _buildPinBox(_controllers[index]),
                 ),
-                Container(
-
-
-                  margin: EdgeInsets.only(left: 12, right: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      textbox(textEditingController1),
-                      textbox(textEditingController2),
-                      textbox(textEditingController3),
-                      textbox(textEditingController4)
-                    ],
-                  ),
+              ),
+              const Spacer(),
+              SizedBox(
+                width: double.infinity,
+                height: 48,
+                child: ElevatedButton(
+                  onPressed: _onSubmit,
+                  child: const Text("Videre"),
                 ),
-                Spacer(),
-                Container(
-                  margin: EdgeInsets.only(left: 16, right: 16),
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          fixedSize: Size(MediaQuery.of(context).size.width, 22)
-                      ),
-                      onPressed: (){
-                        int pin = int.parse("${textEditingController1.value.text}${textEditingController2.value.text}${textEditingController3.value.text}${textEditingController4.value.text}");
-                        savePin(pin);
-
-                      }, child: Text("Videre")),
-                )
-              ],
-            ),
-          )),
-    ) ;
-  }
-
-  Widget textbox(TextEditingController t){
-    return Container(
-      margin: EdgeInsets.all(6),
-      width: 55,
-      height: 55,
-
-      child: TextField(controller: t) ,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
-  Future<void> savePin(int pin) async {
- final shared =   await SharedPreferences.getInstance();
- shared.setInt("pin", pin);
+  Widget _buildStepIndicator() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFF7EB),
+        borderRadius: BorderRadius.circular(100),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: const [
+          CircleAvatar(
+            radius: 14,
+            backgroundColor: Colors.transparent,
+            child: CircleAvatar(
+              radius: 10,
+              backgroundColor: Color(0xFFFF9400),
+            ),
+          ),
+          SizedBox(width: 8),
+          Text(
+            'Trin 3 af 10',
+            style: TextStyle(
+              color: Color(0xFF231303),
+              fontSize: 14,
+              fontFamily: 'Figtree',
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
+  Widget _buildPinBox(TextEditingController controller) {
+    return Container(
+      width: 60,
+      height: 75,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF3F7FF),
+        border: Border.all(color: const Color(0xFFCCDDFE)),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: TextField(
+        controller: controller,
+        keyboardType: TextInputType.number,
+        textAlign: TextAlign.center,
+        maxLength: 1,
+        style: const TextStyle(
+          color: Color(0xFF392919),
+          fontSize: 22,
+          fontFamily: 'Figtree',
+          fontWeight: FontWeight.w400,
+        ),
+        decoration: const InputDecoration(
+          counterText: '', // removes the char counter
+          border: InputBorder.none,
+        ),
+        onChanged: (value) {
+          if (value.isNotEmpty) {
+            // move to next box automatically
+            final index = _controllers.indexOf(controller);
+            if (index < _controllers.length - 1) {
+              FocusScope.of(context).nextFocus();
+            }
+          }
+        },
+      ),
+    );
+  }
+
+  void _onSubmit() {
+    final pin = _controllers.map((c) => c.text).join();
+    debugPrint("PIN entered: $pin");
+    navigateWithSlide(context, SavePinCodeWidget(), SlideDirection.right);
+    // TODO: handle PIN logic (validate or save)
+  }
 }

@@ -37,6 +37,11 @@ dependencies:
   uni_links: any
   flutter_svg: any
   flutter_launcher_icons: any
+  flutter_switch: any
+  dropdown_button2: any
+  riff_switch: any
+  percent_indicator: any
+  date_picker_plus: any
 
 flutter_launcher_icons:
   android: true
