@@ -4,8 +4,6 @@ import 'package:appelsin/SmashPageWidget.dart';
 import 'package:appelsin/bank/IncomeWidget.dart';
 import 'package:appelsin/customer/CreateCustomerWidget.dart';
 import 'package:appelsin/pincode/PinCodeSetupWidget.dart';
-import 'package:appelsin/signup/BiometricWidget.dart';
-import 'package:appelsin/signup/ChatBotWidget.dart';
 import 'package:appelsin/signup/NameWidget.dart';
 import 'package:appelsin/signup/TelefonNummerWidget.dart';
 import 'package:appelsin/signup/VerifyPhoneNumberWidget.dart';

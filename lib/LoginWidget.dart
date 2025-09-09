@@ -20,7 +20,7 @@ class _Loginwidget extends State<Loginwidget> {
                   children: [
 
 
-                  cw.Customwidgets.label("Login"),
+                  cw.Customwidgets.buildLabel("Login"),
                       cw.Customwidgets.textField(login)
                     
                   ],  

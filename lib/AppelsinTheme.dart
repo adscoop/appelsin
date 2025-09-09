@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class AppelsinTheme {
   static ThemeData lightTheme() {
     return ThemeData(
+
       // Tab bar theme
       tabBarTheme: TabBarThemeData(
         indicator: BoxDecoration(

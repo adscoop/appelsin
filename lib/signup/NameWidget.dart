@@ -74,22 +74,22 @@ class _Namewidget extends State<Namewidget> {
       children: [
         Container(
             margin: EdgeInsets.only(left: 16, right: 16),
-            child: Customwidgets.label("Fornavn")),
+            child: Customwidgets.buildLabel("Fornavn")),
         Container(child: Customwidgets.textField(fornavm)),
         Container(
             margin: EdgeInsets.only(left: 16, right: 16),
 
-            child: Customwidgets.label("Efternavn")),
+            child: Customwidgets.buildLabel("Efternavn")),
         Customwidgets.textField(efternavn),
         Container(
             margin: EdgeInsets.only(left: 16, right: 16),
 
-            child: Customwidgets.label("E-mail")),
+            child: Customwidgets.buildLabel("E-mail")),
         Customwidgets.textField(email),
         Container(
             margin: EdgeInsets.only(left: 16, right: 16),
 
-            child: Customwidgets.label("Telefonnummer")),
+            child: Customwidgets.buildLabel("Telefonnummer")),
         Customwidgets.textField(telefon, prefixText: '+45'),
        Container(child: Text("Vi sender en SMS til dit telefonnummer for at verificere \n det når du trykker “Videre” .")),
           Container(

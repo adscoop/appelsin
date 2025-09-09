@@ -3,13 +3,38 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 class Customwidgets  {
 
-static  Widget label(String text) {
+   static double _kLabelMarginTop = 5;
+    static double _kLabelMarginBottom = 3;
+
+static   TextStyle kLabelTextStyle = TextStyle(
+    color: Color(0xFF392919),
+    // primary-dark-brown-dark-brown-100
+    fontSize: 16,
+    fontFamily: 'Figtree',
+    fontWeight: FontWeight.w400,
+    height: 1.25,
+  );
+
+  static Widget buildLabel(String text, {
+    double left = 0,
+    double right = 0,
+    EdgeInsetsGeometry? margin,
+    TextStyle? style,
+  }) {
+    final EdgeInsetsGeometry effectiveMargin = margin ??
+        EdgeInsets.only(
+          top: _kLabelMarginTop,
+          bottom: _kLabelMarginBottom,
+          left: left,
+          right: right,
+        );
+
     return Container(
       alignment: Alignment.centerLeft,
-      margin: EdgeInsets.only(top: 12, bottom: 12),
+      margin: effectiveMargin,
       child: Text(
         text,
-        style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400),
+        style: style ?? kLabelTextStyle,
       ),
     );
   }
@@ -19,7 +44,8 @@ static Widget textField(
       Widget? prefix,
       Widget? suffix,
       String? label,
-      String? prefixText
+      String? prefixText,
+      TextAlign? textAlign
     }) {
   return Container(
     margin: EdgeInsets.only(left: 16, right: 16),

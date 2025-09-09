@@ -67,38 +67,6 @@ class _PinCodeSetupWidgetState extends State<PinCodeSetupWidget> {
     );
   }
 
-  Widget _buildStepIndicator() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFF7EB),
-        borderRadius: BorderRadius.circular(100),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: const [
-          CircleAvatar(
-            radius: 14,
-            backgroundColor: Colors.transparent,
-            child: CircleAvatar(
-              radius: 10,
-              backgroundColor: Color(0xFFFF9400),
-            ),
-          ),
-          SizedBox(width: 8),
-          Text(
-            'Trin 3 af 10',
-            style: TextStyle(
-              color: Color(0xFF231303),
-              fontSize: 14,
-              fontFamily: 'Figtree',
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildPinBox(TextEditingController controller) {
     return Container(
