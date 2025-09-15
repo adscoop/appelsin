@@ -123,7 +123,7 @@ class _Namewidget extends State<Namewidget> {
     },
     ),
     ),
-
+SizedBox(height: 180),
 Container(
   margin: EdgeInsets.only(left: 16, right: 16),
   child: ElevatedButton(onPressed: (){

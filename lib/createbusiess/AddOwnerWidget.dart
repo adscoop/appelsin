@@ -9,7 +9,7 @@ import  'package:appelsin/models/OwnerDTO.dart';
 class AddOwnerWidget extends StatefulWidget {
  final  Function(OwnerDTO) call;
 
- const AddOwnerWidget({Key? key , required this.call});
+ const AddOwnerWidget({Key? key , required this.call}): super(key: key);
   @override
   State<StatefulWidget> createState() => _AddOwnerWidget();
 }

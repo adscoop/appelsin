@@ -9,12 +9,12 @@ class AppelsinTheme {
       tabBarTheme: TabBarThemeData(
         indicator: BoxDecoration(
 
-          color: Colors.orange,
+          color: Color(0xFF0354F0),
           borderRadius: BorderRadius.circular(8),
 
         ),
         labelColor: Colors.white,
-        unselectedLabelColor: Colors.orange,
+        unselectedLabelColor: Colors.black,
         dividerColor: Colors.white,
         dividerHeight: 0,
 
@@ -40,7 +40,7 @@ class AppelsinTheme {
             borderRadius: BorderRadius.circular(7),
             borderSide: BorderSide(color: CupertinoDynamicColor.withBrightness(color: Colors.blue.shade900, darkColor: Colors.orangeAccent), width: 0.1
         )),
-        fillColor: const Color(0xFFCCDDFE),
+        fillColor: const Color(0xFFF3F7FF),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(7),
           borderSide: BorderSide(color: CupertinoDynamicColor.withBrightness(color: Colors.red, darkColor: Colors.redAccent))
@@ -109,7 +109,24 @@ fillColor: WidgetStatePropertyAll(Colors.blue),
         overlayColor: WidgetStatePropertyAll(Colors.blue),
 
       ),
+segmentedButtonTheme: SegmentedButtonThemeData(
+  style: SegmentedButton.styleFrom(
+    iconSize: 0,
+    // uvalgt: sort tekst
+    backgroundColor: Colors.white,               // uvalgt: hvid baggrund
+    selectedBackgroundColor: const Color(0xFF3B82F6),
+    selectedForegroundColor: Colors.white,       // valgt: hvid tekst
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.zero,
+    ),
 
+    side: const BorderSide(
+      color: Colors.transparent,
+      width: 0,
+    ),
+    fixedSize: const Size(114, 32),
+  ),
+),
     );
   }
 }
