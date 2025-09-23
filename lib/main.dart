@@ -4,6 +4,7 @@ import 'package:appelsin/SmashPageWidget.dart';
 import 'package:appelsin/bank/IncomeWidget.dart';
 import 'package:appelsin/customer/CreateCustomerWidget.dart';
 import 'package:appelsin/pincode/PinCodeSetupWidget.dart';
+import 'package:appelsin/recipie/RecipieCameraWidget.dart';
 import 'package:appelsin/signup/NameWidget.dart';
 import 'package:appelsin/signup/TelefonNummerWidget.dart';
 import 'package:appelsin/signup/VerifyPhoneNumberWidget.dart';
@@ -13,6 +14,8 @@ import 'package:uni_links/uni_links.dart';
 import 'danskebank/OpretDbWidget.dart';
 import 'package:appelsin/invoices/InvoiceWidget.dart';
 import 'danskebank/CountryListWidget.dart';
+import 'package:appelsin/recipie/RecipieCameraWidget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
 final GoRouter _router = GoRouter(
@@ -21,7 +24,7 @@ final GoRouter _router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (_, __) =>InvoiceWidget(),
+      builder: (_, __) => Recipiecamerawidget(),
     ),
 GoRoute(path: 'sms', builder: (_,state) { return VerifyPhoneNumberWidget(phoneNumber: 11233); }),
     GoRoute(path: 'email', builder: (_ ,state)  {
@@ -39,7 +42,9 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   try {
-    // Initialize Stripe
+    // Clear SharedPreferences on app load
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
 
     await initUniLinks();
     runApp(const MyApp());
@@ -67,7 +72,6 @@ Future<void> initUniLinks() async {
 }
 
 void _handleIncomingLink(String link) {
-  //https://app.waken.dk/email?code=0906
   final uri = Uri.parse(link);
   final path = uri.path;
   final code = uri.queryParameters['code'] ?? '';
