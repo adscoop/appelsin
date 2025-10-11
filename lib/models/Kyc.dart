@@ -2,24 +2,27 @@ import 'package:appelsin/models/AppelsinBruger.dart';
 
 class Kyc {
 
-  Appelsinbruger appelsin_bruger;
-  String linje;
-  bool isDone;
+  
+  int? appelsinBrugerId;
+   String linje;
+  bool? isDone;
+  double? ammount;
+ 
 
   Kyc({
-    required this.appelsin_bruger,
+    required this.appelsinBrugerId,
     required this.linje,
     required this.isDone
 });
 
   factory Kyc.fromJson(Map<String, dynamic> map) {
-    return Kyc(appelsin_bruger: Appelsinbruger.fromJson(map['appelsin_bruger']), linje: map['linje'], isDone: map['isDone']);
+    return Kyc(appelsinBrugerId: map['appelsinBrugerId'], linje: map['linje'], isDone: map['isDone']);
   }
 
 
   Map<String, dynamic> toJson(){
     return {
-      'appelsin_bruger': appelsin_bruger.toJson(),
+      'appelsinBrugerId': appelsinBrugerId,
       'linje':linje,
       'isDone':isDone
     };

@@ -1,20 +1,36 @@
+import 'dart:convert';
+
+import 'package:appelsin/apis/AppelsinKycApi.dart';
+import 'package:appelsin/models/Kyc.dart';
 import 'package:flutter/material.dart';
 import 'package:appelsin/customwidgets/CustomWidgets.dart';
-import 'package:appelsin/danskebank/CountryListWidget.dart';
+import 'package:appelsin/kyc/CountryListWidget.dart';
 import 'package:appelsin/customwidgets/NavigatorDirection.dart';
 import 'package:appelsin/customwidgets/SlideDirection.dart';
-import 'package:appelsin/danskebank/DbDescripbeYourCompanyWidget.dart';
+import 'package:appelsin/kyc/DbDescripbeYourCompanyWidget.dart';
 class TransferTypeWidget extends StatefulWidget {
-  const TransferTypeWidget({super.key});
+  final int user_id;
+  const TransferTypeWidget({Key? key, required this.user_id}): super(key: key);
 
   @override
   State<TransferTypeWidget> createState() => _TransferTypeWidgetState();
 }
 
 class _TransferTypeWidgetState extends State<TransferTypeWidget> {
+  late Appelsinkycapi _appelsinkycapi; 
+  late String danish_only;
+  late List<String> countries;
   bool leftSelected = false;
   bool rightSelected = false;
 bool showKistWidget = false;
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+_appelsinkycapi = Appelsinkycapi();
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,6 +149,7 @@ bool showKistWidget = false;
                   CountryListWidget(
                     lande: (selected) {
                       print("Selected countries: $selected");
+                      countries = selected;
                     },
                   ),
 SizedBox(height: 300),
@@ -143,6 +160,7 @@ SizedBox(height: 300),
     fixedSize: Size(MediaQuery.of(context).size.width, 48),
     ),
                     onPressed: () {
+      AddToKyc();
                       navigateWithSlide(context, DbDescripbeYourCompanyWidget(), SlideDirection.left);
                     },
                     child: const Text("Videre"),
@@ -166,5 +184,9 @@ SizedBox(height: 300),
         ),
 
     );
+  }
+  Future<void> AddToKyc() async{
+  final kyc = Kyc(appelsinBrugerId: widget.user_id, linje: jsonEncode(countries), isDone: true);
+ final respose =  await  _appelsinkycapi.createKyc(kyc, widget.user_id);
   }
 }

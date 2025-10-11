@@ -3,7 +3,8 @@ import 'package:appelsin/customwidgets/SlideDirection.dart';
 import 'package:appelsin/customwidgets/NavigatorDirection.dart';
 import 'DbTransferTypeWidget.dart';
 class DbSamtykkeWidget extends StatefulWidget {
-  const DbSamtykkeWidget({super.key});
+  final int user_id;
+  const DbSamtykkeWidget({Key? key, required this.user_id}): super(key: key);
 
   @override
   State<DbSamtykkeWidget> createState() => _DbSamtykkeWidgetState();
@@ -110,7 +111,7 @@ class _DbSamtykkeWidgetState extends State<DbSamtykkeWidget> {
               Spacer(),
               Container(
                 child: ElevatedButton(onPressed: (){
-                  navigateWithSlide(context, TransferTypeWidget(), SlideDirection.left);
+                  navigateWithSlide(context, TransferTypeWidget(user_id: widget.user_id,), SlideDirection.left);
                 }, child: Text("Forsæt")),
               )
             ],

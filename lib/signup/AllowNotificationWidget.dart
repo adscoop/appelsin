@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:appelsin/customwidgets/CustomWidgets.dart';
 import 'package:appelsin/customwidgets/NavigatorDirection.dart';
 import 'package:appelsin/customwidgets/SlideDirection.dart';
-import 'package:appelsin/danskebank/DbSamtyggeWidget.dart';
-import 'package:appelsin/danskebank/HarKontoHosDbWidget.dart';
-import 'package:appelsin/danskebank/DbTransferTypeWidget.dart';
+import 'package:appelsin/kyc/DbSamtyggeWidget.dart';
+import 'package:appelsin/kyc/HarKontoHosDbWidget.dart';
+import 'package:appelsin/kyc/DbTransferTypeWidget.dart';
 import 'package:appelsin/signup/AlmostDoneCreeateCompanyRampWidget.dart';
 
 class AllowNotificationWidget extends StatefulWidget {

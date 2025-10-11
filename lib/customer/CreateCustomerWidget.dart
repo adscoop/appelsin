@@ -71,11 +71,11 @@ final TextEditingController city = TextEditingController();
       padding: EdgeInsets.all(16),
       child: Column(
         children: [
-        Customwidgets.buildLabel("Land", margin: EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 16)),
+        Customwidgets.buildLabel("Land", margin: EdgeInsets.only(left: 16, right: 16, bottom: 4, top: 8)),
           dropdownCountry(),
-        Customwidgets.buildLabel("Navn", margin: EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 16)),
+        Customwidgets.buildLabel("Navn", margin: EdgeInsets.only(left: 16, right: 16, bottom: 4, top: 8)),
     Customwidgets.textField(nameController),
-          Customwidgets.buildLabel("CVR", margin: EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 16)),
+          Customwidgets.buildLabel("CVR", margin: EdgeInsets.only(left: 16, right: 16, bottom: 4, top: 8)),
           Customwidgets. textField(cvrController),
           Customwidgets. buildLabel("Adresse", margin: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16), style: TextStyle(
             color: const Color(0xFF231303) /* primary-dark-brown-dark-brown-200 */,

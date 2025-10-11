@@ -142,11 +142,13 @@ Container(
       LastName: efternavn.text,
       PhoneNumber: telefon.text,
       Email: email.text,
-      stilling: selectedTitle
+      position: selectedTitle
     );
 
     final res = await _appelsinApi.opretAppelsinBruger(bruger);
-navigateWithSlide(context, PinCodeSetupWidget(), SlideDirection.left);
+    if(res.statusCode == 200) {
+      _appelsinApi.sendSms('+45${telefon.text}');
+    }
   }
 }
 

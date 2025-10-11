@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:appelsin/customwidgets/NavigatorDirection.dart';
 import 'package:appelsin/customwidgets/SlideDirection.dart';
-import 'package:appelsin/danskebank/DbAddCountryWidget.dart';
+import 'package:appelsin/kyc/DbAddCountryWidget.dart';
 
 class CountryListWidget extends StatefulWidget {
   final Function(List<String>) lande; // callback to parent

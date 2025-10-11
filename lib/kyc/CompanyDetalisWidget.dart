@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:appelsin/customwidgets/CustomWidgets.dart';
 import 'package:appelsin/customwidgets/SlideDirection.dart';
 import 'package:appelsin/customwidgets/NavigatorDirection.dart';
-import 'package:appelsin/danskebank/CompanyDetailStepTwoWidget.dart';
+import 'package:appelsin/kyc/CompanyDetailStepTwoWidget.dart';
 class CompanyDetailsWidget extends StatefulWidget {
   const CompanyDetailsWidget({super.key});
 

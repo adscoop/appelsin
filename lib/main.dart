@@ -3,6 +3,7 @@ import 'package:appelsin/DashBoardWidget.dart';
 import 'package:appelsin/SmashPageWidget.dart';
 import 'package:appelsin/bank/IncomeWidget.dart';
 import 'package:appelsin/customer/CreateCustomerWidget.dart';
+import 'package:appelsin/danskebank/NuVaerendeBankWidget.dart';
 import 'package:appelsin/pincode/PinCodeSetupWidget.dart';
 import 'package:appelsin/recipie/RecipieCameraWidget.dart';
 import 'package:appelsin/signup/NameWidget.dart';
@@ -11,9 +12,9 @@ import 'package:appelsin/signup/VerifyPhoneNumberWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:uni_links/uni_links.dart';
-import 'danskebank/OpretDbWidget.dart';
+import 'kyc//OpretDbWidget.dart';
 import 'package:appelsin/invoices/InvoiceWidget.dart';
-import 'danskebank/CountryListWidget.dart';
+import 'kyc//CountryListWidget.dart';
 import 'package:appelsin/recipie/RecipieCameraWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
@@ -24,16 +25,19 @@ final GoRouter _router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (_, __) => Recipiecamerawidget(),
+      builder: (_, __) => Opretdbwidget(email: 'thomas@kleist-it.com')
     ),
-GoRoute(path: 'sms', builder: (_,state) { return VerifyPhoneNumberWidget(phoneNumber: 11233); }),
-    GoRoute(path: 'email', builder: (_ ,state)  {
-  return VerifyPhoneNumberWidget(phoneNumber: 123123)   ;
+    GoRoute(path: 'sms', builder: (_ ,state)  {
+      final code =  int.parse(state.uri.queryParameters['code'] ?? '');
+      final phone =  int.parse(state.uri.queryParameters['phone'] ?? '');
+      
+  return VerifyPhoneNumberWidget(phoneNumber: phone, code: code, )   ;
 } ),
     GoRoute(path: 'login', builder: (_,state)  {
-      final code = state.uri.queryParameters['code'] ?? '';
-      final type = state.uri.queryParameters['type'] ?? '';
-      return VerifyPhoneNumberWidget(phoneNumber: 11233);
+      final code =  int.parse(state.uri.queryParameters['code'] ?? '');
+      final phone =  int.parse(state.uri.queryParameters['phone'] ?? '');
+       
+      return VerifyPhoneNumberWidget(phoneNumber: phone, code: code,);
     })
   ],
 );
@@ -44,7 +48,7 @@ Future<void> main() async {
   try {
     // Clear SharedPreferences on app load
     final prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
+    await prefs.remove("captured_pictures_b64");
 
     await initUniLinks();
     runApp(const MyApp());

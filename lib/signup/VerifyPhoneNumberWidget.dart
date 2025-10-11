@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class VerifyPhoneNumberWidget extends StatefulWidget {
   final int phoneNumber;
-
-  const VerifyPhoneNumberWidget({Key? key, required this.phoneNumber}) : super(key: key);
+final int code;
+  const VerifyPhoneNumberWidget({Key? key, required this.phoneNumber, required this.code}) : super(key: key);
 
   @override
   State<VerifyPhoneNumberWidget> createState() => _VerifyPhoneNumberWidgetState();
@@ -61,7 +61,7 @@ class _VerifyPhoneNumberWidgetState extends State<VerifyPhoneNumberWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Vi har sendt en verificeringskode til dit telefonnummer\n${widget.phoneNumber}.\nIndtast koden herunder for at verificere dit telefonnummer.",
+              "Din telefon er blevet vertificret \n${widget.phoneNumber}.\n med koden ${widget.code}.",
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 16),
             ),

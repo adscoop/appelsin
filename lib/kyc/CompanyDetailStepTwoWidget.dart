@@ -3,7 +3,7 @@ import 'package:appelsin/customwidgets/CustomWidgets.dart';
 import 'package:appelsin/customwidgets/NavigatorDirection.dart';
 import 'package:appelsin/customwidgets/SlideDirection.dart';
 import 'package:riff_switch/riff_switch.dart';
-import 'package:appelsin/danskebank/AlmostDoneWidget.dart';
+import 'package:appelsin/kyc/AlmostDoneWidget.dart';
 class CompanyDetailStepTwoWidget extends StatefulWidget {
   const CompanyDetailStepTwoWidget({Key? key}) : super(key: key);
 

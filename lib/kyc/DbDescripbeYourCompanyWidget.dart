@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:appelsin/customwidgets/CustomWidgets.dart';
 import 'package:appelsin/customwidgets/SlideDirection.dart';
 import 'package:appelsin/customwidgets/NavigatorDirection.dart';
-import 'package:appelsin/danskebank/CompanyDetalisWidget.dart';
+import 'package:appelsin/kyc/CompanyDetalisWidget.dart';
 class DbDescripbeYourCompanyWidget extends StatefulWidget {
 
   const DbDescripbeYourCompanyWidget({Key? key}) : super(key: key);

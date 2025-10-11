@@ -1,12 +1,16 @@
+import 'package:appelsin/apis/AppelsinApi.dart';
+import 'package:appelsin/apis/AppelsinKycApi.dart';
+import 'package:appelsin/models/AppelsinBruger.dart';
 import 'package:flutter/material.dart';
 import 'package:appelsin/customwidgets/CustomWidgets.dart';
 import 'package:appelsin/customwidgets/NavigatorDirection.dart';
 import 'package:appelsin/customwidgets/SlideDirection.dart';
-import 'package:appelsin/danskebank/DbSamtyggeWidget.dart';
-import 'package:appelsin/danskebank/HarKontoHosDbWidget.dart';
-import 'package:appelsin/danskebank/DbTransferTypeWidget.dart';
+import 'package:appelsin/kyc/DbSamtyggeWidget.dart';
+import 'package:appelsin/kyc/HarKontoHosDbWidget.dart';
+import 'package:appelsin/kyc/DbTransferTypeWidget.dart';
 class Opretdbwidget extends StatefulWidget {
-  const Opretdbwidget({Key? key}) : super(key: key);
+  final String email;
+  const Opretdbwidget({Key? key, required this.email}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _OpretdbwidgetState();
@@ -15,6 +19,24 @@ class Opretdbwidget extends StatefulWidget {
 enum Group { har_danske, har_ikke_db }
 
 class _OpretdbwidgetState extends State<Opretdbwidget> {
+  late Future<int> user_id;
+  late Appelsinapi _appelsinapi;
+  late Appelsinkycapi _appelsinkycapi;
+  
+  @override
+  void initState() {
+    super.initState();
+    _appelsinapi = Appelsinapi();
+    _appelsinkycapi = Appelsinkycapi();
+    user_id = getBruger();
+    
+  }
+  
+  Future<int> getBruger() async {
+   final bruger =  await _appelsinapi.getBrugerByEmail(widget.email);
+  return await bruger!.id ?? 0;
+  }
+  
   Group _group = Group.har_danske;
 
   @override
@@ -108,9 +130,11 @@ class _OpretdbwidgetState extends State<Opretdbwidget> {
                 alignment: Alignment.center,
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    
                     if (_group == Group.har_ikke_db) {
-                      navigateWithSlide(context, const TransferTypeWidget(), SlideDirection.right);
+                      final actualUserId = await user_id;
+                      navigateWithSlide(context, TransferTypeWidget(user_id: actualUserId), SlideDirection.right);
                     } else {
                       navigateWithSlide(context, const HarKontoHosDbWidget(), SlideDirection.right);
                     }
@@ -127,4 +151,6 @@ class _OpretdbwidgetState extends State<Opretdbwidget> {
       ),
     );
   }
+
+
 }
