@@ -44,6 +44,11 @@ dependencies:
   date_picker_plus: any
   sliding_action_button: any
   camera: any
+  rxdart: any
+  firebase_core: any
+  firebase_messaging: any
+  flutter_local_notifications: any
+
  
 
 flutter_launcher_icons:

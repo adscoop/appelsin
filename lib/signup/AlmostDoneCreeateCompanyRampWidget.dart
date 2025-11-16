@@ -1,11 +1,14 @@
 
+import 'package:appelsin/models/AppelsinBruger.dart';
 import 'package:flutter/material.dart';
 import 'package:appelsin/customwidgets/CustomWidgets.dart';
 import 'package:appelsin/customwidgets/NavigatorDirection.dart';
 import 'package:appelsin/customwidgets/SlideDirection.dart';
 import 'package:appelsin/createbusiess/CompanyCVRDetailsWidget.dart';
 class AlmostDoneCreeateCompanyRampWidget extends StatefulWidget {
+final Appelsinbruger appelsinbruger;
 
+const AlmostDoneCreeateCompanyRampWidget({Key? key, required this.appelsinbruger}):super(key: key);
   @override
   State<StatefulWidget> createState() => _AlmostDoneCreeateCompanyRampWidget();
 
@@ -43,7 +46,7 @@ body: SafeArea(child: Container(
         margin: EdgeInsets.only(left: 16, right: 16,bottom: 10),
 
         child: ElevatedButton(onPressed: () {
-          navigateWithSlide(context, CompanyCVRDetailsWidget(), SlideDirection.right);
+          navigateWithSlide(context, CompanyCVRDetailsWidget(appelsinbruger:  widget.appelsinbruger,), SlideDirection.right);
         }, child: Text("Forbind din virksomhed", style:  TextStyle(
           color: const Color(0xFF392919) /* primary-dark-brown-dark-brown-100 */,
           fontSize: 17,

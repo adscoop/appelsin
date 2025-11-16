@@ -6,7 +6,7 @@ final String? PhoneNumber; // Made nullable
 final String Email ;      // Keep required if always expected
 final String? position;   // Made nullable
 final int? hasPin;
-final int? pin;
+ int? pin;
 
 Appelsinbruger({
   this.id,
@@ -22,24 +22,24 @@ Appelsinbruger({
 factory Appelsinbruger.fromJson(Map<String, dynamic> map) {
   return Appelsinbruger(
    id: map['id'],
-    FirstName: map['FirstName'], 
-    LastName: map['LastName'], 
-    PhoneNumber: map['PhoneNumber'], 
-    Email: map['Email'] ?? '', // Keep default for required field
+    FirstName: map['firstName'],
+    LastName: map['lastName'],
+    PhoneNumber: map['phoneNumber'],
+    Email: map['email'] ?? '', // Keep default for required field
     position: map['position'], 
-    hasPin: map['hasPin'], 
+    hasPin: map['has_pin'],
     pin: map['pin']
   );
 }
 
 Map<String , dynamic> toJson(){
   return {
-    'FirstName': this.FirstName,
-    'LastName': this.LastName,
+    'firstName': this.FirstName,
+    'lastName': this.LastName,
     'PhoneNumber': this.PhoneNumber,
-    'Email': this.Email,
+    'email': this.Email,
     'position' : this.position,
-    'hasPin': this.hasPin,
+    'has_pin': this.hasPin,
     'pin': this.pin
   };
 }

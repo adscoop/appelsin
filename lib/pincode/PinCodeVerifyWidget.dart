@@ -1,3 +1,4 @@
+import 'package:appelsin/models/AppelsinBruger.dart';
 import 'package:flutter/material.dart';
 import 'package:appelsin/customwidgets/CustomWidgets.dart';
 import 'package:appelsin/customwidgets/NavigatorDirection.dart';
@@ -5,13 +6,16 @@ import 'package:appelsin/customwidgets/SlideDirection.dart';
 import 'package:appelsin/pincode/PinCodeVerifyWidget.dart';
 import 'package:appelsin/pincode/SavePinCodeWidget.dart';
 class PinCodeVerifyWidget extends StatefulWidget {
-  const PinCodeVerifyWidget({super.key});
+  final String pin;
+  final Appelsinbruger appelsinbruger;
+  const PinCodeVerifyWidget({Key? key, required this.pin, required this.appelsinbruger}):super (key: key);
 
   @override
   State<StatefulWidget> createState() => _PinCodeVerifyWidget();
 }
 
 class _PinCodeVerifyWidget extends State<PinCodeVerifyWidget> {
+
   final List<TextEditingController> _controllers =
   List.generate(4, (_) => TextEditingController());
 
@@ -112,7 +116,30 @@ class _PinCodeVerifyWidget extends State<PinCodeVerifyWidget> {
   void _onSubmit() {
     final pin = _controllers.map((c) => c.text).join();
     debugPrint("PIN entered: $pin");
-    navigateWithSlide(context, SavePinCodeWidget(), SlideDirection.right);
-    // TODO: handle PIN logic (validate or save)
+    if(pin != widget.pin) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('PIN-kode stemmer ikke', style: TextStyle(fontFamily: 'Sora')),
+          content: const Text('De to PIN-koder er ikke ens. Prøv igen.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+      return;
+    } else {
+      print("verify pin = ${pin}  widget pin ${widget.pin}");
+      navigateWithSlide(context, SavePinCodeWidget(
+
+          pin: int.parse(pin), appelsinbruger: widget.appelsinbruger),
+          SlideDirection.right);
+      // TODO: handle PIN logic (validate or save)
+    }
   }
 }

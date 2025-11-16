@@ -122,7 +122,26 @@ final TextEditingController city = TextEditingController();
                 backgroundColor: Color(0xFF0354F0)
               ),
               onPressed: () {
-                Customer cu  = Customer(country:  _selectedCountry ??'',name: nameController.value.text, emails: _email, by:city.value.text,nummer: int.tryParse(nameController.value.text) ?? 0, postnummer: int.parse(zipController.value.text), telefon:  telefonnummer.value.text, vejnavn:streetController.value.text, cpr: cvrController.value.text, email: emailController.value.text);
+                // Safe parse for zip/postnummer and number
+                int _toInt(String? s, {int defaultValue = 0}) {
+                  final v = (s ?? '').trim();
+                  if (v.isEmpty) return defaultValue;
+                  final m = RegExp(r'^(\d+)').firstMatch(v);
+                  if (m != null) return int.tryParse(m.group(1)!) ?? defaultValue;
+                  return int.tryParse(v) ?? defaultValue;
+                }
+                Customer cu  = Customer(
+                  country:  _selectedCountry ??'',
+                  name: nameController.value.text,
+                  emails: _email,
+                  by: city.value.text,
+                  nummer: int.tryParse(nameController.value.text) ?? 0,
+                  postnummer: _toInt(zipController.value.text),
+                  telefon:  telefonnummer.value.text,
+                  vejnavn: streetController.value.text,
+                  cpr: cvrController.value.text,
+                  email: emailController.value.text,
+                );
                 widget.addCustomer(cu);
 
                 },
@@ -194,7 +213,25 @@ final TextEditingController city = TextEditingController();
                   backgroundColor: Color(0xFF0354F0)
               ),
               onPressed: () {
-                Customer cu  = Customer(country:  _selectedCountry ??'',name: nameController.value.text, emails: _email, by:city.value.text,nummer: int.tryParse(nameController.value.text) ?? 0, postnummer: int.parse(zipController.value.text), telefon:  telefonnummer.value.text, vejnavn:streetController.value.text, cvr: cvrController.value.text, email: emailController.value.text);
+                int _toInt(String? s, {int defaultValue = 0}) {
+                  final v = (s ?? '').trim();
+                  if (v.isEmpty) return defaultValue;
+                  final m = RegExp(r'^(\d+)').firstMatch(v);
+                  if (m != null) return int.tryParse(m.group(1)!) ?? defaultValue;
+                  return int.tryParse(v) ?? defaultValue;
+                }
+                Customer cu  = Customer(
+                  country:  _selectedCountry ??'',
+                  name: nameController.value.text,
+                  emails: _email,
+                  by: city.value.text,
+                  nummer: int.tryParse(nameController.value.text) ?? 0,
+                  postnummer: _toInt(zipController.value.text),
+                  telefon:  telefonnummer.value.text,
+                  vejnavn: streetController.value.text,
+                  cvr: cvrController.value.text,
+                  email: emailController.value.text,
+                );
                widget.addCustomer(cu);
 
               },

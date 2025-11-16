@@ -161,7 +161,7 @@ SizedBox(height: 300),
     ),
                     onPressed: () {
       AddToKyc();
-                      navigateWithSlide(context, DbDescripbeYourCompanyWidget(), SlideDirection.left);
+                      navigateWithSlide(context, DbDescripbeYourCompanyWidget(appelsinBrugerid: widget.user_id,), SlideDirection.left);
                     },
                     child: const Text("Videre"),
                   ),
@@ -186,7 +186,7 @@ SizedBox(height: 300),
     );
   }
   Future<void> AddToKyc() async{
-  final kyc = Kyc(appelsinBrugerId: widget.user_id, linje: jsonEncode(countries), isDone: true);
+  final kyc = Kyc(appelsinBrugerId: widget.user_id, linje: jsonEncode(countries), isDone: true,step:  'Har du danskeBank');
  final respose =  await  _appelsinkycapi.createKyc(kyc, widget.user_id);
   }
 }

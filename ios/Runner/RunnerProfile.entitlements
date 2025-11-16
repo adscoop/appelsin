@@ -4,8 +4,9 @@
 <dict>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:appelsin.dk</string>
-		<string>applinks:appelsin.dk?mode=developer</string>
+		<string>applinks:link.appelsin.dk
+applinks:link.appelsin.dk
+applinks:link.appelsin.dk</string>
 	</array>
 </dict>
 </plist>

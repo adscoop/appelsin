@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:appelsin/apis/AppelsinKycApi.dart';
+import 'package:appelsin/models/Kyc.dart';
 import 'package:flutter/material.dart';
 import 'package:appelsin/customwidgets/CustomWidgets.dart';
 import 'package:appelsin/customwidgets/NavigatorDirection.dart';
@@ -5,21 +9,39 @@ import 'package:appelsin/customwidgets/SlideDirection.dart';
 import 'package:riff_switch/riff_switch.dart';
 import 'package:appelsin/kyc/AlmostDoneWidget.dart';
 class CompanyDetailStepTwoWidget extends StatefulWidget {
-  const CompanyDetailStepTwoWidget({Key? key}) : super(key: key);
+  final int appelsinbruger_id;
+  const CompanyDetailStepTwoWidget({Key? key, required this.appelsinbruger_id}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _CompanyDetailStepTwoWidget();
 }
 
 class _CompanyDetailStepTwoWidget extends State<CompanyDetailStepTwoWidget> {
+  
+  // Helper to store selections in sumOfAll as key:value pairs (unique per key)
+  void _putToSum(String key, String value) {
+    sumOfAll.removeWhere((s) => s.startsWith('$key:'));
+    sumOfAll.add('$key:$value');
+  }
+  
+  late Appelsinkycapi _appelsinkycapi;
+  Set<String> sumOfAll = {};
   bool _modtag = false;
   String _hvorofte = '';
   String _hvorofte2 = '';
+  String _omsaetning = '';
   bool _betalerLeverandoerIKontanter = false;
 
   bool hvorOfteModager = false;
   bool hvorOfteModager2 = false;
   bool _kunderOver15K = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _appelsinkycapi = Appelsinkycapi();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +76,7 @@ class _CompanyDetailStepTwoWidget extends State<CompanyDetailStepTwoWidget> {
                           onChanged: (bool newValue) {
                             setState(() {
                               _modtag = newValue;
+                              _putToSum('modtagKontanter', newValue.toString());
                             });
                           },
                           inactiveTrackColor: Colors.white,
@@ -100,6 +123,7 @@ class _CompanyDetailStepTwoWidget extends State<CompanyDetailStepTwoWidget> {
                                 onChanged: (bool newValue) {
                                   setState(() {
                                     hvorOfteModager = newValue;
+                                    _putToSum('kunderKontant', newValue.toString());
                                   });
                                 },
                                 inactiveTrackColor: Colors.white,
@@ -133,6 +157,7 @@ Spacer(),
                                       onChanged: (bool newValue) {
                                         setState(() {
                                           _kunderOver15K = newValue;
+                                          _putToSum('kunderOver15K', newValue.toString());
                                         });
                                       },
                                       inactiveTrackColor: Colors.white,
@@ -175,6 +200,7 @@ Spacer(),
                                 onChanged: (bool newValue) {
                                   setState(() {
                                     hvorOfteModager2 = newValue;
+                                    _putToSum('leverKontant', newValue.toString());
                                   });
                                 },
                                 inactiveTrackColor: Colors.white,
@@ -208,6 +234,7 @@ Spacer(),
                                       onChanged: (bool newValue) {
                                         setState(() {
                                           _betalerLeverandoerIKontanter = newValue;
+                                          _putToSum('leverOver15K', newValue.toString());
                                         });
                                       },
                                       inactiveTrackColor: Colors.white,
@@ -264,166 +291,190 @@ Spacer(),
                         ),
                       ),
                     ),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: ShapeDecoration(
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                            width: 1,
-                            color: const Color(0xFFEEE3D8) /* primary-dark-brown-beige-20 */,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        spacing: 16,
-                        children: [
-                          Container(
-                            width: 54,
-                            height: 64,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              spacing: 10,
-                              children: [
-                                Container(
-                                  width: 28,
-                                  height: 32,
-                                  clipBehavior: Clip.antiAlias,
-                                  decoration: BoxDecoration(),
-                                  child:Image.asset("assets/images/3x/pos_appelsinillu@3x.png", width: 24, height: 24),
-                                ),
-                              ],
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _omsaetning = 'Op til 50.000 kr';
+                          _putToSum('omsaetning', _omsaetning);
+                        });
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        decoration: ShapeDecoration(
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                              width: 1,
+                              color: const Color(0xFFEEE3D8) /* primary-dark-brown-beige-20 */,
                             ),
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                          SizedBox(
-                            width: 226,
-                            child: Text(
-                              'Op til 50.000 kr',
-                              style: TextStyle(
-                                color: const Color(0xFF231303) /* primary-dark-brown-dark-brown-200 */,
-                                fontSize: 14,
-                                fontFamily: 'Figtree',
-                                fontWeight: FontWeight.w400,
-                                height: 1.71,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          spacing: 16,
+                          children: [
+                            Container(
+                              width: 54,
+                              height: 64,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                spacing: 10,
+                                children: [
+                                  Container(
+                                    width: 28,
+                                    height: 32,
+                                    clipBehavior: Clip.antiAlias,
+                                    decoration: BoxDecoration(),
+                                    child:Image.asset("assets/images/3x/pos_appelsinillu@3x.png", width: 24, height: 24),
+                                  ),
+                                ],
                               ),
                             ),
-                          ),
-                        ],
+                            SizedBox(
+                              width: 226,
+                              child: Text(
+                                'Op til 50.000 kr',
+                                style: TextStyle(
+                                  color: const Color(0xFF231303) /* primary-dark-brown-dark-brown-200 */,
+                                  fontSize: 14,
+                                  fontFamily: 'Figtree',
+                                  fontWeight: FontWeight.w400,
+                                  height: 1.71,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: ShapeDecoration(
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                            width: 1,
-                            color: const Color(0xFFEEE3D8) /* primary-dark-brown-beige-20 */,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        spacing: 16,
-                        children: [
-                          Container(
-                            width: 54,
-                            height: 54,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              spacing: 10,
-                              children: [
-                                Container(
-                                  width: 64,
-                                  height: 50,
-                                  clipBehavior: Clip.antiAlias,
-                                  decoration: BoxDecoration(),
-                                  child: Image.asset("assets/images/3x/pos_appelsiner@3x.png", width: 24, height: 24),
-                                ),
-                              ],
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _omsaetning = 'Op til 100.000 kr';
+                          _putToSum('omsaetning', _omsaetning);
+                        });
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        decoration: ShapeDecoration(
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                              width: 1,
+                              color: const Color(0xFFEEE3D8) /* primary-dark-brown-beige-20 */,
                             ),
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                          SizedBox(
-                            width: 226,
-                            child: Text(
-                              'Op til 100.000 kr',
-                              style: TextStyle(
-                                color: const Color(0xFF231303) /* primary-dark-brown-dark-brown-200 */,
-                                fontSize: 14,
-                                fontFamily: 'Figtree',
-                                fontWeight: FontWeight.w400,
-                                height: 1.71,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          spacing: 16,
+                          children: [
+                            Container(
+                              width: 54,
+                              height: 54,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                spacing: 10,
+                                children: [
+                                  Container(
+                                    width: 64,
+                                    height: 50,
+                                    clipBehavior: Clip.antiAlias,
+                                    decoration: BoxDecoration(),
+                                    child: Image.asset("assets/images/3x/pos_appelsiner@3x.png", width: 24, height: 24),
+                                  ),
+                                ],
                               ),
                             ),
-                          ),
-                        ],
+                            SizedBox(
+                              width: 226,
+                              child: Text(
+                                'Op til 100.000 kr',
+                                style: TextStyle(
+                                  color: const Color(0xFF231303) /* primary-dark-brown-dark-brown-200 */,
+                                  fontSize: 14,
+                                  fontFamily: 'Figtree',
+                                  fontWeight: FontWeight.w400,
+                                  height: 1.71,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: ShapeDecoration(
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                            width: 1,
-                            color: const Color(0xFFEEE3D8) /* primary-dark-brown-beige-20 */,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        spacing: 16,
-                        children: [
-                          Container(
-                            width: 54,
-                            height: 54,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              spacing: 10,
-                              children: [
-                                Container(
-                                  width: 54,
-                                  height: 47,
-                                  clipBehavior: Clip.antiAlias,
-                                  decoration: BoxDecoration(),
-                                  child: Image.asset("assets/images/3x/pos_kasse@3x.png", width: 24, height: 24),
-                                ),
-                              ],
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _omsaetning = 'Over 100.000 kr';
+                          _putToSum('omsaetning', _omsaetning);
+                        });
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        decoration: ShapeDecoration(
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                              width: 1,
+                              color: const Color(0xFFEEE3D8) /* primary-dark-brown-beige-20 */,
                             ),
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                          SizedBox(
-                            width: 216,
-                            child: Text(
-                              'Over 100.000 kr',
-                              style: TextStyle(
-                                color: const Color(0xFF231303) /* primary-dark-brown-dark-brown-200 */,
-                                fontSize: 14,
-                                fontFamily: 'Figtree',
-                                fontWeight: FontWeight.w400,
-                                height: 1.71,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          spacing: 16,
+                          children: [
+                            Container(
+                              width: 54,
+                              height: 54,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                spacing: 10,
+                                children: [
+                                  Container(
+                                    width: 54,
+                                    height: 47,
+                                    clipBehavior: Clip.antiAlias,
+                                    decoration: BoxDecoration(),
+                                    child: Image.asset("assets/images/3x/pos_kasse@3x.png", width: 24, height: 24),
+                                  ),
+                                ],
                               ),
                             ),
-                          ),
-                        ],
+                            SizedBox(
+                              width: 216,
+                              child: Text(
+                                'Over 100.000 kr',
+                                style: TextStyle(
+                                  color: const Color(0xFF231303) /* primary-dark-brown-dark-brown-200 */,
+                                  fontSize: 14,
+                                  fontFamily: 'Figtree',
+                                  fontWeight: FontWeight.w400,
+                                  height: 1.71,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -438,6 +489,7 @@ Spacer(),
                 children: [
                   Container(margin: EdgeInsets.only(bottom: 6),
                     child:      ElevatedButton(onPressed: () {
+                      addkyc();
                       navigateWithSlide(context, AlmostDoneWidget(), SlideDirection.left);
                     }, child: Text("Videre"),
 
@@ -471,6 +523,7 @@ Spacer(),
           onChanged: (value) {
             setState(() {
               _hvorofte = value ?? '';
+              _putToSum('kunderHvorOfte', _hvorofte);
             });
           },
         ),
@@ -489,6 +542,7 @@ Spacer(),
           onChanged: (value) {
             setState(() {
               _hvorofte2 = value ?? '';
+              _putToSum('leverHvorOfte', _hvorofte2);
             });
           },
         ),
@@ -508,5 +562,10 @@ Spacer(),
         borderRadius: BorderRadius.circular(12),
       ),
     );
+  }
+  
+  Future<void> addkyc() async {
+    Kyc kyc = Kyc(appelsinBrugerId: widget.appelsinbruger_id, linje: jsonEncode(sumOfAll.toList()), isDone: true, step: 'Company details step 2');
+  await  _appelsinkycapi.createKyc(kyc, widget.appelsinbruger_id);
   }
 }

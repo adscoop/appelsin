@@ -1,23 +1,36 @@
+import 'package:appelsin/apis/AppelsinKycApi.dart';
+import 'package:appelsin/models/Kyc.dart';
 import 'package:flutter/material.dart';
 import 'package:appelsin/customwidgets/CustomWidgets.dart';
 import 'package:appelsin/customwidgets/SlideDirection.dart';
 import 'package:appelsin/customwidgets/NavigatorDirection.dart';
 import 'package:appelsin/kyc/CompanyDetailStepTwoWidget.dart';
+import 'dart:convert';
 class CompanyDetailsWidget extends StatefulWidget {
-  const CompanyDetailsWidget({super.key});
+  final int appelsin_userid;
+  const CompanyDetailsWidget({Key? key, required this.appelsin_userid}):super(key: key);
 
   @override
   State<CompanyDetailsWidget> createState() => _CompanyDetailsWidget();
 }
 
 class _CompanyDetailsWidget extends State<CompanyDetailsWidget> {
+  
+late Appelsinkycapi _appelsinkycapi;
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _appelsinkycapi = Appelsinkycapi();
+  }
   // Single selection for products/services
   final List<String> produkter = ["Produkter", "Services"];
   String selectedProd = "";
 
   // Multi-selection for contact with customers
   final List<String> kontaktMedKunder = ["Fysisk", "Online", "Øvrige"];
-  final Set<String> selectedKontakt = {};
+   Set<String> selectedKontakt = {};
 
   // Multi-selection for customer types
   final List<String> kundeTyper = [
@@ -29,7 +42,7 @@ class _CompanyDetailsWidget extends State<CompanyDetailsWidget> {
     "Øvrige"
   ];
   final Set<String> selectedKundeTyper = {};
-
+final Set<String> allSelected = {};
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,7 +108,8 @@ class _CompanyDetailsWidget extends State<CompanyDetailsWidget> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    navigateWithSlide(context, CompanyDetailStepTwoWidget(), SlideDirection.down);
+                    addKyc();
+                    navigateWithSlide(context, CompanyDetailStepTwoWidget(appelsinbruger_id: widget.appelsin_userid,), SlideDirection.down);
                   },
                   child: const Text("Videre"),
                 ),
@@ -186,4 +200,27 @@ class _CompanyDetailsWidget extends State<CompanyDetailsWidget> {
       ),
     );
   }
+
+Future<void> addKyc() async {
+  // Build a flat, unique list of selections
+  final selections = <String>[
+    if (selectedProd.isNotEmpty) selectedProd,
+    ...selectedKontakt,        // Set<String> -> spreads fine
+    ...selectedKundeTyper,     // Set<String> -> spreads fine
+  ];
+
+  // If you need uniqueness, enforce it then back to list
+  final uniqueSelections = selections.toSet().toList();
+
+  final kyc = Kyc(
+    appelsinBrugerId: widget.appelsin_userid,
+    linje: jsonEncode(uniqueSelections), // ✅ List -> encodable
+    isDone: true,
+    step: 'company details',
+  );
+
+  // Optionally send it
+  await _appelsinkycapi.createKyc(kyc,widget.appelsin_userid);
+}
+
 }

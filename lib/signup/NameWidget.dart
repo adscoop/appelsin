@@ -2,7 +2,7 @@
 import 'package:appelsin/apis/AppelsinApi.dart';
 import 'package:appelsin/models/AppelsinBruger.dart';
 import 'package:appelsin/signup/CheckEmailWidget.dart';
-import 'package:appelsin/signup/SendSmsValidateWidget.dart';
+import 'package:appelsin/signup/VerifyPhoneNumberWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -147,7 +147,8 @@ Container(
 
     final res = await _appelsinApi.opretAppelsinBruger(bruger);
     if(res.statusCode == 200) {
-      _appelsinApi.sendSms('+45${telefon.text}');
+      _appelsinApi.sendSms('+45${telefon.text}', '${fornavm.text} ${efternavn.text}');
+      navigateWithSlide(context, VerifyPhoneNumberWidget(phoneNumber: '+45${telefon.text}', email:  email.value.text,), SlideDirection.right);
     }
   }
 }

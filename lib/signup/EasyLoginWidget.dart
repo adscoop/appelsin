@@ -1,3 +1,4 @@
+import 'package:appelsin/models/AppelsinBruger.dart';
 import 'package:flutter/material.dart';
 import 'package:appelsin/customwidgets/CustomWidgets.dart';
 import 'package:appelsin/customwidgets/NavigatorDirection.dart';
@@ -6,8 +7,9 @@ import 'package:appelsin/pincode/PinCodeVerifyWidget.dart';
 import 'package:appelsin/pincode/SavePinCodeWidget.dart';
 import 'package:appelsin/signup/AllowNotificationWidget.dart';
 class EasyLoginWidget extends StatefulWidget {
-
-  @override
+final Appelsinbruger appelsinbruger;
+const EasyLoginWidget({Key? key, required this.appelsinbruger}): super(key: key)
+;  @override
   State<StatefulWidget> createState() => _EasyLoginWidget();
 
 }
@@ -40,7 +42,7 @@ class _EasyLoginWidget extends State<EasyLoginWidget> {
             Container(
               margin: EdgeInsets.only(left: 16, right: 16),
               child: ElevatedButton(onPressed: (){
-                navigateWithSlide(context, AllowNotificationWidget(), SlideDirection.right);
+                navigateWithSlide(context, AllowNotificationWidget(appelsinbruger:  widget.appelsinbruger,), SlideDirection.right);
               }, child: Text("Ja Benyt face id"),
               style: ElevatedButton.styleFrom(
                 fixedSize: Size(MediaQuery.of(context).size.width, 22)

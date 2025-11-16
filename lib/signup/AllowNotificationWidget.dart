@@ -1,4 +1,5 @@
 
+import 'package:appelsin/models/AppelsinBruger.dart';
 import 'package:flutter/material.dart';
 import 'package:appelsin/customwidgets/CustomWidgets.dart';
 import 'package:appelsin/customwidgets/NavigatorDirection.dart';
@@ -9,7 +10,8 @@ import 'package:appelsin/kyc/DbTransferTypeWidget.dart';
 import 'package:appelsin/signup/AlmostDoneCreeateCompanyRampWidget.dart';
 
 class AllowNotificationWidget extends StatefulWidget {
-
+final Appelsinbruger appelsinbruger;
+const AllowNotificationWidget({Key? key, required this.appelsinbruger});
   @override
   State<StatefulWidget> createState() => _AllowNotificationWidget();
 }
@@ -43,7 +45,7 @@ class _AllowNotificationWidget extends State<AllowNotificationWidget> {
               margin: EdgeInsets.only(left: 16, right: 16, top: 90),
 
               child: ElevatedButton(onPressed: (){
-                navigateWithSlide(context, AlmostDoneCreeateCompanyRampWidget(), SlideDirection.right);
+                navigateWithSlide(context, AlmostDoneCreeateCompanyRampWidget(appelsinbruger: widget.appelsinbruger,), SlideDirection.right);
               }, child: Text("Ja, send mig notifikaitoner"),
               style: ElevatedButton.styleFrom(
                 fixedSize: Size(MediaQuery.of(context).size.width, 22)

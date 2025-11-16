@@ -59,5 +59,8 @@ class _AlmostDoneWidget extends State<AlmostDoneWidget> {
     );
 
   }
+  Future<void> addKyc() async {
+
+  }
 
 }

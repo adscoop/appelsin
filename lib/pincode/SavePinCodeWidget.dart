@@ -1,15 +1,30 @@
+import 'package:appelsin/apis/AppelsinApi.dart';
+import 'package:appelsin/models/AppelsinBruger.dart';
 import 'package:flutter/material.dart';
 import 'package:appelsin/customwidgets/CustomWidgets.dart';
 import 'package:appelsin/signup/EasyLoginWidget.dart';
 import 'package:appelsin/customwidgets/SlideDirection.dart';
 import 'package:appelsin/customwidgets/NavigatorDirection.dart';
 class SavePinCodeWidget extends StatefulWidget{
+  final Appelsinbruger appelsinbruger;
+  final int pin;
+
+  const SavePinCodeWidget({Key? key, required this.pin, required this.appelsinbruger}): super(key: key);
+
 @override
   State<StatefulWidget> createState() => _SavePinCodeWidget();
 }
 
 class _SavePinCodeWidget extends State<SavePinCodeWidget> {
+late Appelsinapi _appelsinapi;
 
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _appelsinapi = Appelsinapi();
+    addPinCode();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +51,11 @@ class _SavePinCodeWidget extends State<SavePinCodeWidget> {
             Container(
               margin: EdgeInsets.only(left: 16, right:  16),
               child: ElevatedButton(onPressed: (){
-                navigateWithSlide(context, EasyLoginWidget(), SlideDirection.right);
+
+widget.appelsinbruger.pin = widget.pin;
+print(widget.appelsinbruger.pin);
+addPinCode();
+                navigateWithSlide(context, EasyLoginWidget(appelsinbruger: widget.appelsinbruger,), SlideDirection.right);
               }, child: Text("Videre"),
               style:  ElevatedButton.styleFrom(
                 fixedSize: Size(MediaQuery.of(context).size.width, 22)
@@ -47,5 +66,9 @@ class _SavePinCodeWidget extends State<SavePinCodeWidget> {
         ),
       )),
     );
+  }
+
+  Future<void> addPinCode() async{
+   await _appelsinapi.updateAppelsinBruger(widget.appelsinbruger);
   }
 }

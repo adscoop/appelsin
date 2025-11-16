@@ -1,3 +1,11 @@
+import 'dart:convert';
+
+import 'package:appelsin/apis/CompaniesApi.dart';
+import 'package:appelsin/apis/OwnersApi.dart';
+import 'package:appelsin/models/Address.dart';
+import 'package:appelsin/models/AppelsinBruger.dart';
+import 'package:appelsin/models/Companies.dart';
+import 'package:appelsin/models/Owners.dart';
 import 'package:flutter/material.dart';
 import 'package:appelsin/customwidgets/CustomWidgets.dart';
 import 'package:appelsin/customwidgets/SlideDirection.dart';
@@ -7,6 +15,9 @@ import 'package:appelsin/models/OwnerDTO.dart';
 import 'package:appelsin/price/PriceWidget.dart';
 
 class OwnersWidget extends StatefulWidget {
+  final Appelsinbruger appelsinbruger;
+
+  const OwnersWidget({Key? key, required this.appelsinbruger}): super(key: key);
   @override
   State<StatefulWidget> createState() => _OwnersWidget();
 }
@@ -14,12 +25,22 @@ class OwnersWidget extends StatefulWidget {
 class _OwnersWidget extends State<OwnersWidget> {
   // Dynamisk datakilde til liste af ejere
   final List<OwnerDTO> _owners = <OwnerDTO>[]; // growable
+late Ownersapi _ownersapi;
 
+late CompaniesApi _companiesApi;
+late Companies companies;
   @override
   void initState() {
     super.initState();
+    _ownersapi = Ownersapi();
+    _companiesApi = CompaniesApi();
+
+
   }
 
+  Future<void> loadCompany()async {
+  companies =  await _companiesApi.getCompanyByUserId( widget.appelsinbruger.id!);
+  }
   // Bygger et kort/Container for en ejer
   Widget _ownerCard(OwnerDTO owner) {
     return Container(
@@ -213,9 +234,47 @@ class _OwnersWidget extends State<OwnersWidget> {
   }
 
   Future<void> addElementToList(OwnerDTO value) async {
+   await loadCompany();
+    // Safe parsing helpers
+    int _toInt(String? s, {int defaultValue = 0}) {
+      final v = (s ?? '').trim();
+      if (v.isEmpty) return defaultValue;
+      final m = RegExp(r'^(\d+)').firstMatch(v);
+      if (m != null) return int.tryParse(m.group(1)!) ?? defaultValue;
+      return int.tryParse(v) ?? defaultValue;
+    }
+
+    int _digitsToInt(String? s, {int defaultValue = 0}) {
+      final digits = (s ?? '').replaceAll(RegExp(r'[^0-9]'), '');
+      if (digits.isEmpty) return defaultValue;
+      return int.tryParse(digits) ?? defaultValue;
+    }
+
+    final addresse = Address(
+      bynavn: value.city,
+      husnummerFra: _toInt(value.vejnavn_nummer),
+      postnummer: _toInt(value.postnummer),
+    );
+    Owners owners = Owners(
+      efternavn: value.efternavn,
+      fornavn: value.fornavn,
+      ejerandle: value.ejerandel,
+      erpep: value.erDuPep,
+      rolle:  value.rolle,
+      telefom: value.telefonnummer,
+      er_kontaktpersom: value.erKontaktPerson,
+
+      addresse: jsonEncode(addresse),
+      cpr: _digitsToInt(value.cpr),
+      skattepligt: value.skattepligt,
+      statsborge: value.statsborgerskab,
+      cvr_id: companies.id,
+    );
+    await _ownersapi.create(owners);
     setState(() {
       _owners.add(value);
     });
+
   }
 
   Future<void> populate() async {

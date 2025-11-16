@@ -1,9 +1,16 @@
+import 'dart:convert';
+
+import 'package:appelsin/apis/AppelsinApi.dart';
 import 'package:flutter/material.dart';
+import 'package:appelsin/signup/TelefonNummerWidget.dart';
+import 'package:flutter_launcher_icons/main.dart';
 
 class VerifyPhoneNumberWidget extends StatefulWidget {
-  final int phoneNumber;
-final int code;
-  const VerifyPhoneNumberWidget({Key? key, required this.phoneNumber, required this.code}) : super(key: key);
+  final String phoneNumber;
+  final String email;
+  final void Function(String code)? onSubmitCode;
+
+  const VerifyPhoneNumberWidget({Key? key, required this.phoneNumber, this.onSubmitCode, required this.email}) : super(key: key);
 
   @override
   State<VerifyPhoneNumberWidget> createState() => _VerifyPhoneNumberWidgetState();
@@ -11,6 +18,56 @@ final int code;
 
 class _VerifyPhoneNumberWidgetState extends State<VerifyPhoneNumberWidget> {
   final List<TextEditingController> _controllers = List.generate(4, (_) => TextEditingController());
+  bool _isSubmitting = false;
+
+  String get _enteredCode => _controllers.map((c) => c.text).join();
+  late Appelsinapi _appelsinapi;
+
+  @override
+  void initState() {
+    super.initState();
+    _appelsinapi = Appelsinapi();
+  }
+
+  Future<void> _verifyCode(String code) async {
+    if (_isSubmitting) return;
+    setState(() => _isSubmitting = true);
+    try {
+      final resp = await _appelsinapi.verify(widget.phoneNumber, code);
+     final appelsinBruger= await _appelsinapi.getBrugerByEmail(widget.email);
+     print(jsonEncode(appelsinBruger));
+      if (!mounted) return;
+      if (resp.statusCode == 200) {
+        // On successful verification, navigate to Telefonnummerwidget
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => Telefonnummerwidget(phone:widget.phoneNumber, appelsinbruger: appelsinBruger,)),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Verifikation mislykkedes (${resp.statusCode})')),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Fejl: ${e.toString()}')),
+      );
+    } finally {
+      if (mounted) setState(() => _isSubmitting = false);
+    }
+  }
+
+  void _submitIfComplete() {
+    _verifyCode(_enteredCode);
+    final code = _enteredCode;
+    if (code.length == 4) {
+      if (widget.onSubmitCode != null) {
+        widget.onSubmitCode!.call(code);
+      } else {
+        _verifyCode(code);
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -23,8 +80,8 @@ class _VerifyPhoneNumberWidgetState extends State<VerifyPhoneNumberWidget> {
   Widget _buildDigitTextField(int index) {
     return Container(
       margin: EdgeInsets.only(right: index < 3 ? 8 : 0),
-      width: 40,
-      height: 50,
+      width: 48,
+      height: 56,
       child: TextField(
         controller: _controllers[index],
         maxLength: 1,
@@ -39,12 +96,21 @@ class _VerifyPhoneNumberWidgetState extends State<VerifyPhoneNumberWidget> {
             borderSide: BorderSide(color: Colors.blue, width: 2),
           ),
         ),
-        style: TextStyle(fontSize: 12),
+        style: TextStyle(fontSize: 18, letterSpacing: 2),
         onChanged: (value) {
-          if (value.length == 1 && index < 3) {
-            FocusScope.of(context).nextFocus();
+          if (value.isNotEmpty) {
+            if (index < 3) {
+              FocusScope.of(context).nextFocus();
+            } else {
+              // Last box filled -> call function
+              _submitIfComplete();
+            }
+          } else {
+            if (index > 0) {
+              FocusScope.of(context).previousFocus();
+            }
           }
-        },
+        }
       ),
     );
   }
@@ -53,7 +119,7 @@ class _VerifyPhoneNumberWidgetState extends State<VerifyPhoneNumberWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Verificere dit telefonnummer"),
+        title: Text("Verificer dit telefonnummer"),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -61,8 +127,8 @@ class _VerifyPhoneNumberWidgetState extends State<VerifyPhoneNumberWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Din telefon er blevet vertificret \n${widget.phoneNumber}.\n med koden ${widget.code}.",
-              textAlign: TextAlign.center,
+              "Indtast den 4-cifrede kode sendt til\n${widget.phoneNumber}",
+              textAlign: TextAlign.left,
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 30),
@@ -70,19 +136,17 @@ class _VerifyPhoneNumberWidgetState extends State<VerifyPhoneNumberWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(4, _buildDigitTextField),
             ),
-        Spacer(),
+            Spacer(),
             SizedBox(
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: () {
-                  // TODO: Verification logic here
-                },
+                onPressed: _submitIfComplete,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange[100],
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
-                child: Text("Forsæt", style: TextStyle(fontSize: 18)),
+                child: Text("Fortsæt", style: TextStyle(fontSize: 18)),
               ),
             ),
           ],

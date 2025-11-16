@@ -30,10 +30,14 @@
 	<array>
 		<string>_dartobservatory._tcp</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>This app requires camera access to take photos.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>We use Face ID to authenticate you</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Appen har brug for adgang til det lokale netværk for udviklingsformål.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app requires microphone access to record video audio.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -53,10 +57,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSCameraUsageDescription</key>
-	<string>This app requires camera access to take photos.</string>
-	<!-- If you also capture video with audio, include microphone permission -->
-	<key>NSMicrophoneUsageDescription</key>
-	<string>This app requires microphone access to record video audio.</string>
 </dict>
 </plist>
