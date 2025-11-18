@@ -7,6 +7,8 @@ final String Email ;      // Keep required if always expected
 final String? position;   // Made nullable
 final int? hasPin;
  int? pin;
+  bool? send_notification;
+  bool? allow_face;
 
 Appelsinbruger({
   this.id,
@@ -16,7 +18,9 @@ Appelsinbruger({
   required this.Email,   // Keep required
   this.position,         // No longer required
   this.hasPin,
-  this.pin
+  this.pin,
+  this.send_notification,
+  this.allow_face
 });
 
 factory Appelsinbruger.fromJson(Map<String, dynamic> map) {
@@ -28,7 +32,9 @@ factory Appelsinbruger.fromJson(Map<String, dynamic> map) {
     Email: map['email'] ?? '', // Keep default for required field
     position: map['position'], 
     hasPin: map['has_pin'],
-    pin: map['pin']
+    pin: map['pin'],
+    send_notification: map['send_notification'],
+    allow_face: map['allow_face']
   );
 }
 
@@ -40,7 +46,9 @@ Map<String , dynamic> toJson(){
     'email': this.Email,
     'position' : this.position,
     'has_pin': this.hasPin,
-    'pin': this.pin
+    'pin': this.pin,
+    'send_notification': this.send_notification,
+    'allow_face': this.allow_face
   };
 }
 

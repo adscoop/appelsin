@@ -1,3 +1,4 @@
+import 'package:appelsin/apis/AppelsinApi.dart';
 import 'package:appelsin/models/AppelsinBruger.dart';
 import 'package:flutter/material.dart';
 import 'package:appelsin/customwidgets/CustomWidgets.dart';
@@ -15,7 +16,14 @@ const EasyLoginWidget({Key? key, required this.appelsinbruger}): super(key: key)
 }
 
 class _EasyLoginWidget extends State<EasyLoginWidget> {
+late Appelsinapi _appelsinapi;
 
+@override
+void initState() {
+    // TODO: implement initState
+    super.initState();
+    _appelsinapi = Appelsinapi();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +49,9 @@ class _EasyLoginWidget extends State<EasyLoginWidget> {
             Spacer(),
             Container(
               margin: EdgeInsets.only(left: 16, right: 16),
-              child: ElevatedButton(onPressed: (){
+              child: ElevatedButton(onPressed: () async{
+                widget.appelsinbruger.allow_face = true;
+              await   _appelsinapi.updateAppelsinBruger(widget.appelsinbruger);
                 navigateWithSlide(context, AllowNotificationWidget(appelsinbruger:  widget.appelsinbruger,), SlideDirection.right);
               }, child: Text("Ja Benyt face id"),
               style: ElevatedButton.styleFrom(

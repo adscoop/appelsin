@@ -1,12 +1,11 @@
 
+import 'package:appelsin/apis/AppelsinApi.dart';
 import 'package:appelsin/models/AppelsinBruger.dart';
 import 'package:flutter/material.dart';
 import 'package:appelsin/customwidgets/CustomWidgets.dart';
 import 'package:appelsin/customwidgets/NavigatorDirection.dart';
 import 'package:appelsin/customwidgets/SlideDirection.dart';
-import 'package:appelsin/kyc/DbSamtyggeWidget.dart';
-import 'package:appelsin/kyc/HarKontoHosDbWidget.dart';
-import 'package:appelsin/kyc/DbTransferTypeWidget.dart';
+
 import 'package:appelsin/signup/AlmostDoneCreeateCompanyRampWidget.dart';
 
 class AllowNotificationWidget extends StatefulWidget {
@@ -17,6 +16,14 @@ const AllowNotificationWidget({Key? key, required this.appelsinbruger});
 }
 
 class _AllowNotificationWidget extends State<AllowNotificationWidget> {
+late Appelsinapi _appelsinapi;
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _appelsinapi = Appelsinapi();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +51,9 @@ class _AllowNotificationWidget extends State<AllowNotificationWidget> {
             Container(
               margin: EdgeInsets.only(left: 16, right: 16, top: 90),
 
-              child: ElevatedButton(onPressed: (){
+              child: ElevatedButton(onPressed:  () async {
+                widget.appelsinbruger.send_notification = true;
+              await  _appelsinapi.updateAppelsinBruger(widget.appelsinbruger);
                 navigateWithSlide(context, AlmostDoneCreeateCompanyRampWidget(appelsinbruger: widget.appelsinbruger,), SlideDirection.right);
               }, child: Text("Ja, send mig notifikaitoner"),
               style: ElevatedButton.styleFrom(

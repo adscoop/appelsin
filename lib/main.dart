@@ -1,5 +1,7 @@
 import 'package:appelsin/LoginWidget.dart';
 import 'package:appelsin/SmashPageWidget.dart';
+import 'package:appelsin/appelsinkonto/AppelsinKontoWidget.dart';
+import 'package:appelsin/price/PriceWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:uni_links/uni_links.dart';

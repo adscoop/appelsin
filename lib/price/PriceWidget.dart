@@ -1,13 +1,36 @@
+import 'package:appelsin/appelsinkonto/AppelsinKontoWidget.dart';
+import 'package:appelsin/models/AppelsinBruger.dart';
 import 'package:flutter/material.dart';
 import 'package:appelsin/customwidgets/CustomWidgets.dart';
-
+import 'package:appelsin/customwidgets/NavigatorDirection.dart';
+import 'package:appelsin/customwidgets/SlideDirection.dart';
 class PriceWidget extends StatefulWidget {
+
+  final Appelsinbruger appelsinbruger;
+  const PriceWidget({Key? key, required this.appelsinbruger}):super(key: key);
+
   @override
   State<StatefulWidget> createState() => _PriceWidget();
 }
 
 class _PriceWidget extends State<PriceWidget> {
   int? _selectedIndex;
+  late final PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    // Ensure exactly one page is shown at a time (no peeking)
+    _pageController = PageController(viewportFraction: 1.0, keepPage: true);
+    // Initialize selection to the first page so only that card is marked selected
+    _selectedIndex = 0;
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,72 +73,80 @@ class _PriceWidget extends State<PriceWidget> {
         ),
       ),
       body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final maxW = constraints.maxWidth;
-            // Decide the card width based on available width
-            final double targetCardWidth = 354;
-            final int columns = maxW ~/ (targetCardWidth + 16); // 16 is spacing
-            final double cardWidth = columns <= 1
-                ? (maxW - 32) // full width minus horizontal padding on small screens
-                : targetCardWidth;
-
-            return SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 8),
-                  Customwidgets.step(0.5, '6', '10'),
-                  const SizedBox(height: 8),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Wrap(
-                      spacing: 16,
-                      runSpacing: 16,
-                      alignment: WrapAlignment.center,
-                      children: List.generate(tiers.length, (i) {
-                        final t = tiers[i];
-                        final selected = _selectedIndex == i;
-                        return SizedBox(
-                          width: cardWidth,
-                          child: _PriceCard(
-                            tier: t,
-                            selected: selected,
-                            onTap: () => setState(() => _selectedIndex = i),
-                          ),
-                        );
-                      }),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: _selectedIndex == null ? null : () {
-                          Navigator.of(context).maybePop(_selectedIndex);
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: 8),
+            Container(
+              alignment: Alignment.center,
+              child:
+            Customwidgets.step(0.5, '6', '10'),
+            ),
+            const SizedBox(height: 8),
+            // Slides between containers (one card per page)
+            Expanded(
+              child: ClipRect(
+                child: PageView.builder(
+                  controller: _pageController,
+                  itemCount: tiers.length,
+                  // Explicitly enforce one-at-a-time paging behavior
+                  physics: const PageScrollPhysics(),
+                  pageSnapping: true,
+                  allowImplicitScrolling: false,
+                  onPageChanged: (index) => setState(() => _selectedIndex = index),
+                  itemBuilder: (context, i) {
+                    final t = tiers[i];
+                    final selected = _selectedIndex == i;
+                    return SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      child: _PriceCard(
+                        tier: t,
+                        selected: selected,
+                        onTap: () {
+                          // Tap selects and snaps to this page
+                          setState(() => _selectedIndex = i);
+                          if (_pageController.hasClients) {
+                            _pageController.animateToPage(
+                              i,
+                              duration: const Duration(milliseconds: 250),
+                              curve: Curves.easeOut,
+                            );
+                          }
                         },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF0354F0),
-                        ),
-                        child: const Text(
-                          'Videre',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontFamily: 'Figtree',
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                ],
+                    );
+                  },
+                ),
               ),
-            );
-          },
+            ),
+            const SizedBox(height: 8),
+            // Simple dots indicator
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(tiers.length, (i) {
+                  final active = (_selectedIndex ?? 0) == i;
+                  return AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    width: active ? 10 : 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                      color: active ? const Color(0xFF0354F0) : const Color(0xFFD6CCBF),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                  );
+                }),
+              ),
+            ),
+            Container(
+              child: ElevatedButton(onPressed:  (){
+                navigateWithSlide(context, Appelsinkontowidget(appelsinbruger: widget.appelsinbruger), SlideDirection.left);
+              }, child: Text("Videre")),
+            ),
+            const SizedBox(height: 16),
+          ],
         ),
       ),
     );

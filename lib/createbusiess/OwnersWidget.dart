@@ -13,6 +13,8 @@ import 'package:appelsin/customwidgets/NavigatorDirection.dart';
 import 'package:appelsin/createbusiess/AddOwnerWidget.dart';
 import 'package:appelsin/models/OwnerDTO.dart';
 import 'package:appelsin/price/PriceWidget.dart';
+import 'package:appelsin/customwidgets/NavigatorDirection.dart';
+import 'package:appelsin/customwidgets/SlideDirection.dart';
 
 class OwnersWidget extends StatefulWidget {
   final Appelsinbruger appelsinbruger;
@@ -215,7 +217,7 @@ late Companies companies;
                   onPressed: () {
                     navigateWithSlide(
                       context,
-                      PriceWidget(),
+                      PriceWidget(appelsinbruger: widget.appelsinbruger,),
                       SlideDirection.left,
                     );
                   },
