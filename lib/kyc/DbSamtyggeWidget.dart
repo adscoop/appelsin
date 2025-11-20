@@ -1,10 +1,11 @@
+import 'package:appelsin/models/AppelsinBruger.dart';
 import 'package:flutter/material.dart';
 import 'package:appelsin/customwidgets/SlideDirection.dart';
 import 'package:appelsin/customwidgets/NavigatorDirection.dart';
 import 'DbTransferTypeWidget.dart';
 class DbSamtykkeWidget extends StatefulWidget {
-  final int user_id;
-  const DbSamtykkeWidget({Key? key, required this.user_id}): super(key: key);
+  final Appelsinbruger appelsinbruger;
+  const DbSamtykkeWidget({Key? key, required this.appelsinbruger}): super(key: key);
 
   @override
   State<DbSamtykkeWidget> createState() => _DbSamtykkeWidgetState();
@@ -111,7 +112,7 @@ class _DbSamtykkeWidgetState extends State<DbSamtykkeWidget> {
               Spacer(),
               Container(
                 child: ElevatedButton(onPressed: (){
-                  navigateWithSlide(context, TransferTypeWidget(user_id: widget.user_id,), SlideDirection.left);
+                  navigateWithSlide(context, TransferTypeWidget(appelsinbruger: widget.appelsinbruger,), SlideDirection.left);
                 }, child: Text("Forsæt")),
               )
             ],

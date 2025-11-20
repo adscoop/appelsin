@@ -140,14 +140,7 @@ class _VerifyPhoneNumberWidgetState extends State<VerifyPhoneNumberWidget> {
             SizedBox(
               width: double.infinity,
               height: 50,
-              child: ElevatedButton(
-                onPressed: _submitIfComplete,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange[100],
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                ),
-                child: Text("Fortsæt", style: TextStyle(fontSize: 18)),
-              ),
+
             ),
           ],
         ),

@@ -1,11 +1,4 @@
-/// Simpelt adresse-objekt til generel brug i appen.
-/// Felter (danske navne):
-/// - vejnavn
-/// - husnummerFra
-/// - husnummerTil (valgfri)
-/// - postnummer
-/// - postdistrikt
-/// - bynavn (valgfri)
+
 class Address {
   final String vejnavn;
   final int husnummerFra;

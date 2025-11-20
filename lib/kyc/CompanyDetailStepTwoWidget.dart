@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:appelsin/apis/AppelsinKycApi.dart';
+import 'package:appelsin/models/AppelsinBruger.dart';
 import 'package:appelsin/models/Kyc.dart';
 import 'package:flutter/material.dart';
 import 'package:appelsin/customwidgets/CustomWidgets.dart';
@@ -9,8 +10,8 @@ import 'package:appelsin/customwidgets/SlideDirection.dart';
 import 'package:riff_switch/riff_switch.dart';
 import 'package:appelsin/kyc/AlmostDoneWidget.dart';
 class CompanyDetailStepTwoWidget extends StatefulWidget {
-  final int appelsinbruger_id;
-  const CompanyDetailStepTwoWidget({Key? key, required this.appelsinbruger_id}) : super(key: key);
+  final Appelsinbruger appelsinbruger;
+  const CompanyDetailStepTwoWidget({Key? key, required this.appelsinbruger}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _CompanyDetailStepTwoWidget();
@@ -490,7 +491,7 @@ Spacer(),
                   Container(margin: EdgeInsets.only(bottom: 6),
                     child:      ElevatedButton(onPressed: () {
                       addkyc();
-                      navigateWithSlide(context, AlmostDoneWidget(), SlideDirection.left);
+                      navigateWithSlide(context, AlmostDoneWidget(appelsinbruger: widget.appelsinbruger,), SlideDirection.left);
                     }, child: Text("Videre"),
 
                       style:  ElevatedButton.styleFrom(
@@ -565,7 +566,7 @@ Spacer(),
   }
   
   Future<void> addkyc() async {
-    Kyc kyc = Kyc(appelsinBrugerId: widget.appelsinbruger_id, linje: jsonEncode(sumOfAll.toList()), isDone: true, step: 'Company details step 2');
-  await  _appelsinkycapi.createKyc(kyc, widget.appelsinbruger_id);
+    Kyc kyc = Kyc(appelsinBrugerId: widget.appelsinbruger.id!, linje: jsonEncode(sumOfAll.toList()), isDone: true, step: 'Company details step 2');
+  await  _appelsinkycapi.createKyc(kyc, widget.appelsinbruger.id!);
   }
 }

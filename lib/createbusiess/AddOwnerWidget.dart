@@ -7,9 +7,19 @@ import 'package:riff_switch/riff_switch.dart';
 import  'package:appelsin/models/OwnerDTO.dart';
 
 class AddOwnerWidget extends StatefulWidget {
- final  Function(OwnerDTO) call;
+  final Function(OwnerDTO) call;
+  // Optional parameters for edit mode
+  final OwnerDTO? initialOwner;
+  final int? ownerIndex;
+  final Function(int, OwnerDTO)? onUpdate;
 
- const AddOwnerWidget({Key? key , required this.call}): super(key: key);
+  const AddOwnerWidget({
+    Key? key,
+    required this.call,
+    this.initialOwner,
+    this.ownerIndex,
+    this.onUpdate,
+  }) : super(key: key);
   @override
   State<StatefulWidget> createState() => _AddOwnerWidget();
 }
@@ -17,7 +27,6 @@ class AddOwnerWidget extends StatefulWidget {
 class _AddOwnerWidget extends State<AddOwnerWidget> {
   bool _modtag = false;
   bool _erDUPep=false;
-  String selecteSkattePligt ="";
   String? selectedResident; // start som null så value matcher betingelsen
   String? selectedSkattepligt; // separat state til skattepligt-dropdown
   TextEditingController fornavn = TextEditingController();
@@ -31,6 +40,31 @@ class _AddOwnerWidget extends State<AddOwnerWidget> {
   TextEditingController skattepligt = TextEditingController();
   TextEditingController city = TextEditingController();
   TextEditingController zipCode = TextEditingController();
+
+  bool get isEdit => widget.initialOwner != null;
+
+  @override
+  void initState() {
+    super.initState();
+    // Prefill fields if editing an existing owner
+    final init = widget.initialOwner;
+    if (init != null) {
+      fornavn.text = init.fornavn;
+      efternavn.text = init.efternavn;
+      ejerprocent.text = init.ejerandel.toString();
+      telefon.text = init.telefonnummer;
+      rolle.text = init.rolle;
+      cpr.text = (init.cpr ?? '').toString();
+      addresse.text = init.vejnavn_nummer ?? '';
+      city.text = init.city ?? '';
+      zipCode.text = init.postnummer ?? '';
+      // Normalize any legacy/english values (e.g., "Danish") to match dropdown items (e.g., "Danmark")
+      selectedResident = _normalizeCountryLabel(init.statsborgerskab);
+      selectedSkattepligt = _normalizeCountryLabel(init.skattepligt);
+      _modtag = init.erKontaktPerson;
+      _erDUPep = init.erDuPep;
+    }
+  }
 
 
   final List<String> SkattePligt = [
@@ -141,7 +175,7 @@ class _AddOwnerWidget extends State<AddOwnerWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(
-        'Tilføj ejer',
+        isEdit ? 'Rediger ejer' : 'Tilføj ejer',
         textAlign: TextAlign.center,
         style: TextStyle(
           color: const Color(0xFF392919) /* primary-dark-brown-dark-brown-100 */,
@@ -388,11 +422,55 @@ _rowWidget(),
 
           Divider(),
           Container(
-margin: EdgeInsets.only(left: 16, right: 16, bottom: 10),
+            margin: EdgeInsets.only(left: 16, right: 16, bottom: 10),
             child: ElevatedButton(onPressed: () {
-             var res = OwnerDTO(fornavn: fornavn.value.text, efternavn: efternavn.value.text, ejerandel: double.parse(ejerprocent.value.text), telefonnummer: telefon.value.text, rolle: rolle.value.text, cpr: cpr.value.text, statsborgerskab: selectedResident!, skattepligt: selecteSkattePligt, vejnavn_nummer: addresse.value.text, city: city.value.text, postnummer: zipCode.value.text, erKontaktPerson: _modtag, erDuPep: _erDUPep, erAndrePep: _erDUPep);
-widget.call(res!);
-            }, child: Text("Tilføj ejer "),
+              // Basal validering og sikker parsing for at undgå null/format-fejl
+              final String firstName = fornavn.value.text;
+              final String lastName = efternavn.value.text;
+              final String ejerandelText = ejerprocent.text;
+              final double? ejerandelVal = double.tryParse(ejerandelText);
+
+              if (selectedResident == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Vælg statsborgerskab')),
+                );
+                return;
+              }
+              if (selectedSkattepligt == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Vælg skattepligt')),
+                );
+                return;
+              }
+              if (ejerandelVal == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Indtast en gyldig ejerandel (tal)')),
+                );
+                return;
+              }
+
+              final res = OwnerDTO(
+                fornavn: firstName,
+                efternavn: lastName,
+                ejerandel: ejerandelVal,
+                telefonnummer: telefon.text.trim(),
+                rolle: rolle.text.trim(),
+                cpr: cpr.text.trim(),
+                statsborgerskab: selectedResident!,
+                skattepligt: selectedSkattepligt!,
+                vejnavn_nummer: addresse.text.trim(),
+                city: city.text.trim(),
+                postnummer: zipCode.text.trim(),
+                erKontaktPerson: _modtag,
+                erDuPep: _erDUPep,
+                erAndrePep: _erDUPep,
+              );
+              if (isEdit && widget.onUpdate != null && widget.ownerIndex != null) {
+                widget.onUpdate!(widget.ownerIndex!, res);
+              } else {
+                widget.call(res);
+              }
+            }, child: Text(isEdit ? "Gem ændringer" : "Tilføj ejer "),
             style: ElevatedButton.styleFrom(
               fixedSize: Size(MediaQuery.of(context).size.width, 22)
             ),
@@ -553,6 +631,80 @@ widget.call(res!);
         ),
       ],
     ));
+  }
+
+  // --- Helpers ---
+  // Convert possible English or code values to the Danish label used in the dropdown lists
+  String? _normalizeCountryLabel(String? input) {
+    if (input == null) return null;
+    final v = input.trim();
+    if (v.isEmpty) return null;
+    // Common quick mappings
+    const Map<String, String> quick = {
+      'Danish': 'Danmark',
+      'Denmark': 'Danmark',
+      'Sweden': 'Sverige',
+      'Norway': 'Norge',
+      'Finland': 'Finland',
+      'Germany': 'Tyskland',
+      'France': 'Frankrig',
+      'Spain': 'Spanien',
+      'Italy': 'Italien',
+      'United Kingdom': 'Storbritannien',
+      'UK': 'Storbritannien',
+      'Ireland': 'Irland',
+      'Netherlands': 'Nederlandene',
+      'Belgium': 'Belgien',
+      'Switzerland': 'Schweiz',
+      'Austria': 'Østrig',
+      'Poland': 'Polen',
+      'Czech Republic': 'Tjekkiet',
+      'Estonia': 'Estland',
+      'Latvia': 'Letland',
+      'Lithuania': 'Litauen',
+      'Iceland': 'Island',
+      'Faroe Islands': 'Færøerne',
+      'Greenland': 'Grønland',
+      'Portugal': 'Portugal',
+      'Greece': 'Grækenland',
+      'Turkey': 'Tyrkiet',
+      'United States': 'USA',
+      'USA': 'USA',
+      'Canada': 'Canada',
+      'Mexico': 'Mexico',
+      'Brazil': 'Brasilien',
+      'Argentina': 'Argentina',
+      'Chile': 'Chile',
+      'Australia': 'Australien',
+      'New Zealand': 'New Zealand',
+      'Japan': 'Japan',
+      'China': 'Kina',
+      'Hong Kong': 'Hongkong',
+      'Singapore': 'Singapore',
+      'India': 'Indien',
+      'Thailand': 'Thailand',
+      'Vietnam': 'Vietnam',
+      'Indonesia': 'Indonesien',
+      'Philippines': 'Filippinerne',
+      'South Korea': 'Sydkorea',
+      'South Africa': 'Sydafrika',
+      'Egypt': 'Egypten',
+      'United Arab Emirates': 'Forenede Arabiske Emirater',
+      'Saudi Arabia': 'Saudi-Arabien',
+      'Qatar': 'Qatar',
+    };
+    // If already one of the items, return as is
+    if (Resisnt.contains(v)) return v;
+    // Try quick map first
+    if (quick.containsKey(v)) return quick[v];
+    // Try case-insensitive match by label
+    final match = Resisnt.firstWhere(
+      (e) => e.toLowerCase() == v.toLowerCase(),
+      orElse: () => '',
+    );
+    if (match.isNotEmpty) return match;
+    // Not recognized → leave null to avoid Dropdown assertion
+    return null;
   }
   Widget _rowWidget(
       ) {

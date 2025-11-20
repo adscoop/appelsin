@@ -3,7 +3,7 @@ class Owners {
   String? fornavn;
   String? efternavn;
   double? ejerandle;
-  String? telefom;
+  String? telefon;
   String? rolle;
   int? cpr;
   String? statsborge;
@@ -19,7 +19,7 @@ class Owners {
     this.fornavn,
     this.efternavn,
     this.ejerandle,
-    this.telefom,
+    this.telefon,
     this.rolle,
     this.cpr,
     this.statsborge,
@@ -41,7 +41,7 @@ class Owners {
       fornavn: json['fornavn'],
       efternavn: json['efternavn'],
       ejerandle: _ejer?.toDouble(),
-      telefom: json['telefom'],
+      telefon: json['telefon'],
       rolle: json['rolle'],
       cpr: _cpr?.toInt(),
       statsborge: json['statsborge'],
@@ -59,7 +59,7 @@ class Owners {
       'fornavn': fornavn,
       'efternavn': efternavn,
       'ejerandle': ejerandle,
-      'telefom': telefom,
+      'telefon': telefon,
       'rolle': rolle,
       'cpr': cpr,
       'statsborge': statsborge,

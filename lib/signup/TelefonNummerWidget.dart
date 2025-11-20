@@ -18,7 +18,7 @@ class _Telefonnummerwidget extends State<Telefonnummerwidget> {
     Widget build(BuildContext context) {
       return Scaffold(
         appBar:  AppBar(
-          title: Text("Verificre dit telefon nummr"),
+          title: Text("Verificre dit telefon "),
         ),
         body: SafeArea(child: Container(
     child: Column(
@@ -29,7 +29,7 @@ class _Telefonnummerwidget extends State<Telefonnummerwidget> {
         Container(
           child: Image.asset('assets/images/3x/appelsin_pos_thumbsup@3x.png'),
         ),
-      Container(child: Text("Vi skal have dit telefon nummer valideret \n Du vil modtage en sms med et link ",style:  TextStyle(fontFamily: 'Sora'),)),
+      Container(child: Text("Dit telefon nummer er blevet verificert ",style:  TextStyle(fontFamily: 'Sora'),)),
 
         Spacer(),
         Container(

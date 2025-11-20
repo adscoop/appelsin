@@ -13,9 +13,9 @@ class _Dashboardwidget extends State<Dashboardwidget> {
   int currentPageIndex = 0;
   @override
     Widget build(BuildContext context) {
-    return   Scaffold(
+    return Scaffold(
       body: pages[currentPageIndex],
-      bottomNavigationBar: _bottamNavigationBar(),
+      bottomNavigationBar: _bottomNavigationBar(),
     );
 
   }
@@ -26,22 +26,53 @@ IncomeWidget(),
     Offerwidget()
   ];
 
-  Widget _bottamNavigationBar() {
-    return Container(
-        height: 100,
-        padding: const EdgeInsets.only(bottom: 0, left: 30, right: 30),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(50),
-          color: Colors.lightBlue,
+  Widget _bottomNavigationBar() {
+    return SafeArea(
+      top: false,
+      child: Padding(
+        // Margin from the bottom and sides
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+        child: Material(
+          color: Colors.blue,
+          elevation: 8,
+          shape: const StadiumBorder(),
+          clipBehavior: Clip.antiAlias,
+          child: Theme(
+            // Make sure the stadium Material color is visible
+            data: Theme.of(context).copyWith(
+              splashColor: Colors.yellow,
+              highlightColor: Colors.red,
+            ),
+            child: BottomNavigationBar(
+              backgroundColor: Colors.transparent,
+              type: BottomNavigationBarType.fixed,
+              currentIndex: currentPageIndex,
+              onTap: (index) => setState(() => currentPageIndex = index),
+              selectedItemColor: Colors.orange,
+              unselectedItemColor: Colors.blue.shade900,
+              showSelectedLabels: true,
+              showUnselectedLabels: true,
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home),
+                  label: 'Overblik',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.opacity_rounded),
+                  label: 'Indtægter',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.abc),
+                  label: 'Udgifter',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.local_offer),
+                  label: 'Tilbud',
+                ),
+              ],
+            ),
+          ),
         ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          _buildNavItem(Icons.home, 0, ""),
-          _buildNavItem(Icons.opacity_rounded, 1, ""),
-          _buildNavItem(Icons.abc, 2, ""),
-          _buildNavItem(Icons.local_offer, 3, ""),
-        ],
       ),
     );
   }

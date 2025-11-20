@@ -5,9 +5,9 @@ import 'dart:convert';
 
 class Bookingapi {
   
-  static String url = 'https://api.appelsin.dk';
+  static String url = 'https://app.appelsin.dk';
   Future<http.Response> create(Booking booking)  async{
-    final uri = Uri.parse('${url}/');
+    final uri = Uri.parse('${url}/api/Booking');
     final shared = await SharedPreferences.getInstance();
     final String jwt = shared.getString('jwt') ?? '';
 
@@ -24,4 +24,5 @@ class Bookingapi {
      throw Exception("Cannot create booking ${response.statusCode}");
    }
   }
+
 }

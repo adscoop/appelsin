@@ -19,7 +19,7 @@ class Opretdbwidget extends StatefulWidget {
 enum Group { har_danske, har_ikke_db }
 
 class _OpretdbwidgetState extends State<Opretdbwidget> {
-  late Future<int> user_id;
+  late Future<Appelsinbruger> user_id;
   late Appelsinapi _appelsinapi;
   late Appelsinkycapi _appelsinkycapi;
   
@@ -32,9 +32,9 @@ class _OpretdbwidgetState extends State<Opretdbwidget> {
     
   }
   
-  Future<int> getBruger() async {
+  Future<Appelsinbruger> getBruger() async {
    final bruger =  await _appelsinapi.getBrugerByEmail(widget.email);
-  return await bruger!.id ?? 0;
+  return await bruger!;
   }
   
   Group _group = Group.har_danske;
@@ -134,7 +134,7 @@ class _OpretdbwidgetState extends State<Opretdbwidget> {
                     
                     if (_group == Group.har_ikke_db) {
                       final actualUserId = await user_id;
-                      navigateWithSlide(context, TransferTypeWidget(user_id: actualUserId), SlideDirection.right);
+                      navigateWithSlide(context, TransferTypeWidget(appelsinbruger: actualUserId), SlideDirection.right);
                     } else {
                       navigateWithSlide(context, const HarKontoHosDbWidget(), SlideDirection.right);
                     }

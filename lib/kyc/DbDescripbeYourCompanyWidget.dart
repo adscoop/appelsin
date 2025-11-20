@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:appelsin/apis/AppelsinKycApi.dart';
+import 'package:appelsin/models/AppelsinBruger.dart';
 import 'package:appelsin/models/Kyc.dart';
 import 'package:flutter/material.dart';
 import 'package:appelsin/customwidgets/CustomWidgets.dart';
@@ -8,8 +9,8 @@ import 'package:appelsin/customwidgets/SlideDirection.dart';
 import 'package:appelsin/customwidgets/NavigatorDirection.dart';
 import 'package:appelsin/kyc/CompanyDetalisWidget.dart';
 class DbDescripbeYourCompanyWidget extends StatefulWidget {
-final int appelsinBrugerid;
-  const DbDescripbeYourCompanyWidget({Key? key, required this.appelsinBrugerid}) : super(key: key);
+final Appelsinbruger appelsinbruger;
+  const DbDescripbeYourCompanyWidget({Key? key, required this.appelsinbruger}) : super(key: key);
 
   @override
   _DbDescripbeYourCompanyWidget createState() => _DbDescripbeYourCompanyWidget();
@@ -49,7 +50,7 @@ return Scaffold(
         Container(
           child: ElevatedButton(onPressed: ()  {
 addKyc();
-            navigateWithSlide(context, CompanyDetailsWidget(appelsin_userid: widget.appelsinBrugerid,), SlideDirection.left);
+            navigateWithSlide(context, CompanyDetailsWidget(appelsinbruger: widget.appelsinbruger,), SlideDirection.left);
           }, child: Text("Videre"),
               style: ElevatedButton.styleFrom(
               fixedSize: Size(MediaQuery.of(context).size.width, 48),
@@ -65,7 +66,7 @@ addKyc();
   
   Future<void> addKyc() async {
     var json = jsonEncode(  textEditingController.value.text);
-    Kyc kyc = Kyc(appelsinBrugerId: widget.appelsinBrugerid, linje:  json, isDone: true, step: 'Beskriv firmma');
-   await _appelsinkycapi.createKyc(kyc, widget.appelsinBrugerid);
+    Kyc kyc = Kyc(appelsinBrugerId: widget.appelsinbruger.id!, linje:  json, isDone: true, step: 'Beskriv firmma');
+   await _appelsinkycapi.createKyc(kyc, widget.appelsinbruger.id!);
   }
 }

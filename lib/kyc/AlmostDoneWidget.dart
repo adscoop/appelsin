@@ -1,4 +1,5 @@
 
+import 'package:appelsin/models/AppelsinBruger.dart';
 import 'package:flutter/material.dart';
 import 'package:appelsin/customwidgets/CustomWidgets.dart';
 import 'package:appelsin/customwidgets/NavigatorDirection.dart';
@@ -6,7 +7,9 @@ import 'package:appelsin/customwidgets/SlideDirection.dart';
 import 'package:appelsin/bookFlow/BookingCalenderWidget.dart';
 
 class AlmostDoneWidget extends StatefulWidget {
+final Appelsinbruger appelsinbruger;
 
+const AlmostDoneWidget({Key? key, required this.appelsinbruger}): super(key: key);
   @override
   State<StatefulWidget> createState() => _AlmostDoneWidget();
 
@@ -39,7 +42,7 @@ class _AlmostDoneWidget extends State<AlmostDoneWidget> {
           Container(
               margin: EdgeInsets.only(top: 20, left: 16, right: 15),
             child: ElevatedButton(onPressed: ( ){
-              navigateWithSlide(context, BookingCalenderWidget(), SlideDirection.left);
+              navigateWithSlide(context, BookingCalenderWidget(appelsinbruger: widget.appelsinbruger), SlideDirection.left);
             }, child: Text("Book tid"),
                 style: ElevatedButton.styleFrom(
                 fixedSize: Size(MediaQuery.of(context).size.width, 48),

@@ -500,23 +500,13 @@ class _CompanyCVRDetailsWidget extends State<CompanyCVRDetailsWidget> {
   }
   
   Future<void> createCompany() async {
-    // Safe integer parsing that tolerates values like "10A" and empty strings
-    int _toInt(String? s, {int defaultValue = 0}) {
-      final v = (s ?? '').trim();
-      if (v.isEmpty) return defaultValue;
-      final m = RegExp(r'^(\d+)').firstMatch(v);
-      if (m != null) {
-        return int.tryParse(m.group(1)!) ?? defaultValue;
-      }
-      return int.tryParse(v) ?? defaultValue;
-    }
 
     final a = _selectedItem?.adresse;
     Address ad = Address(
       bynavn: a?.supplerendeBynavn ?? '',
-      husnummerFra: _toInt(a?.husnummerFra, defaultValue: 0),
-      postnummer: _toInt(a?.postnummer, defaultValue: 0),
-      vejnavn: a?.vejnavn ?? '',
+      husnummerFra: int.tryParse(_selectedItem?.adresse?.husnummerFra ?? '0 ') ?? 0,
+      postnummer: int.tryParse(_selectedItem?.adresse?.postnummer ?? '0 ') ?? 0,
+    vejnavn: a?.vejnavn ?? '',
     );
     final com = Companies(name: _selectedItem?.name ?? '' , appelsinBrugerId: widget.appelsinbruger.id!, addresse: jsonEncode(ad), cvr: _selectedItem?.businessKeys.first.key);
    await _companyApi.createCompany(com);

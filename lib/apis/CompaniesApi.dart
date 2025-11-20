@@ -27,7 +27,7 @@ class CompaniesApi {
     if (response.statusCode == 200) {
       return response;
     } else {
-      throw Exception("failed to create company ");
+      throw Exception("failed to create company ${response.statusCode} ");
     }
 
   }
@@ -39,7 +39,7 @@ class CompaniesApi {
 
     final shared = await SharedPreferences.getInstance();
     final String jwt = shared.getString('jwt') ?? '';
-
+print(jwt);
     // Debug: Check if JWT exists
     if (jwt.isEmpty) {
       throw Exception("JWT token is missing. Please login first.");
@@ -56,7 +56,7 @@ class CompaniesApi {
     if (response.statusCode == 200) {
       return Companies.fromJson(jsonDecode(response.body));
     } else {
-      throw Exception("Get User by Id");
+      throw Exception("Get User by Id ${response.statusCode}");
     }
 
   }

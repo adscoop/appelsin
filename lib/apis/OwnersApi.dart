@@ -31,7 +31,7 @@ class Ownersapi {
     if (response.statusCode == 200) {
       return response;
     } else {
-      throw Exception("failed to add owner");
+      throw Exception("failed to add owner ${response.statusCode}");
     }
 
   }

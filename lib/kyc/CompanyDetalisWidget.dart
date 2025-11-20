@@ -1,4 +1,5 @@
 import 'package:appelsin/apis/AppelsinKycApi.dart';
+import 'package:appelsin/models/AppelsinBruger.dart';
 import 'package:appelsin/models/Kyc.dart';
 import 'package:flutter/material.dart';
 import 'package:appelsin/customwidgets/CustomWidgets.dart';
@@ -7,8 +8,8 @@ import 'package:appelsin/customwidgets/NavigatorDirection.dart';
 import 'package:appelsin/kyc/CompanyDetailStepTwoWidget.dart';
 import 'dart:convert';
 class CompanyDetailsWidget extends StatefulWidget {
-  final int appelsin_userid;
-  const CompanyDetailsWidget({Key? key, required this.appelsin_userid}):super(key: key);
+  final Appelsinbruger appelsinbruger;
+  const CompanyDetailsWidget({Key? key, required this.appelsinbruger}):super(key: key);
 
   @override
   State<CompanyDetailsWidget> createState() => _CompanyDetailsWidget();
@@ -43,6 +44,14 @@ late Appelsinkycapi _appelsinkycapi;
   ];
   final Set<String> selectedKundeTyper = {};
 final Set<String> allSelected = {};
+
+  // Single-selection SegmentedButton for tax liability
+  // Values are stable keys; labels are the user-facing Danish texts.
+  final List<ButtonSegment<String>> _taxSegments = const [
+    ButtonSegment<String>(value: 'full', label: Text('Fuldt skattepligtig')),
+    ButtonSegment<String>(value: 'limited', label: Text('Begrænset skattepligt')),
+  ];
+  Set<String> _selectedTax = {'full'}; // default selection; change to {} to require explicit choice
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,7 +110,17 @@ final Set<String> allSelected = {};
               ),
               _buildSection(
                 title: "Virksomhedens skattepligt",
-                child: const SizedBox.shrink(),
+                child: SegmentedButton<String>(
+                  segments: _taxSegments,
+                  selected: _selectedTax,
+                  onSelectionChanged: (newSelection) {
+                    setState(() {
+                      _selectedTax = newSelection;
+                    });
+                  },
+                  multiSelectionEnabled: false,
+                  emptySelectionAllowed: false,
+                ),
               ),
               const SizedBox(height: 20),
               SizedBox(
@@ -109,7 +128,7 @@ final Set<String> allSelected = {};
                 child: ElevatedButton(
                   onPressed: () {
                     addKyc();
-                    navigateWithSlide(context, CompanyDetailStepTwoWidget(appelsinbruger_id: widget.appelsin_userid,), SlideDirection.down);
+                    navigateWithSlide(context, CompanyDetailStepTwoWidget(appelsinbruger: widget.appelsinbruger,), SlideDirection.down);
                   },
                   child: const Text("Videre"),
                 ),
@@ -207,20 +226,23 @@ Future<void> addKyc() async {
     if (selectedProd.isNotEmpty) selectedProd,
     ...selectedKontakt,        // Set<String> -> spreads fine
     ...selectedKundeTyper,     // Set<String> -> spreads fine
+    // Include tax liability choice (human-readable)
+    if (_selectedTax.isNotEmpty)
+      (_selectedTax.first == 'full' ? 'Fuldt skattepligtig' : 'Begrænset skattepligt'),
   ];
 
   // If you need uniqueness, enforce it then back to list
   final uniqueSelections = selections.toSet().toList();
 
   final kyc = Kyc(
-    appelsinBrugerId: widget.appelsin_userid,
+    appelsinBrugerId: widget.appelsinbruger.id!,
     linje: jsonEncode(uniqueSelections), // ✅ List -> encodable
     isDone: true,
     step: 'company details',
   );
 
   // Optionally send it
-  await _appelsinkycapi.createKyc(kyc,widget.appelsin_userid);
+  await _appelsinkycapi.createKyc(kyc,widget.appelsinbruger.id!);
 }
 
 }
